@@ -9,7 +9,7 @@ fn get_input() -> Vec<i64> {
         .collect()
 }
 
-fn run_intcode(mut code: Vec<i64>) -> Vec<i64> {
+fn run_intcode(code: & mut Vec<i64>) -> &mut Vec<i64> {
 	let mut i = 0;
 	loop {
 		match code[i] {
@@ -29,27 +29,26 @@ fn run_intcode(mut code: Vec<i64>) -> Vec<i64> {
 	return code;
 }
 
-pub fn part_one() -> i64 {
-	let mut inp = get_input();
+pub fn part_one() -> String {
+	let inp = &mut get_input();
 	inp[1] = 12;
 	inp[2] = 2;
-	inp = run_intcode(inp);
-	return inp[0];
+	return run_intcode(inp)[0].to_string();
 }
-pub fn part_two() -> i64 {
-	let mut inp = get_input();
+pub fn part_two() -> String {
+	let inp = &mut get_input();
 	for result in 0..9999 {
 		inp[1] = result / 100;
 		inp[2] = result % 100;
-		if run_intcode(inp.clone())[0] == 19690720 {
-			return result;
+		if run_intcode(&mut inp.clone())[0] == 19690720 {
+			return result.to_string();
 		}
 	}
-	return 0;
+	return "0".to_string();
 }
 
 #[test]
 fn test() {
-	assert_eq!(part_one(), 5110675);
-	assert_eq!(part_two(), 4847);
+	assert_eq!(part_one(), "5110675");
+	assert_eq!(part_two(), "4847");
 }
