@@ -1,12 +1,9 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::str::FromStr;
 
-
-fn get_input() -> Vec<i64> {
-    let br = BufReader::new(File::open("input/day02.txt").unwrap());
-    br.lines().next().unwrap().unwrap().split(",").map(|s| i64::from_str(s).unwrap())
-        .collect()
+fn parse_input(input: &String) -> Vec<i64> {
+	input.trim()
+		.split(",").map(|s| i64::from_str(s).unwrap())
+		.collect()
 }
 
 fn run_intcode(code: & mut Vec<i64>) -> &mut Vec<i64> {
@@ -29,14 +26,14 @@ fn run_intcode(code: & mut Vec<i64>) -> &mut Vec<i64> {
 	return code;
 }
 
-pub fn part_one() -> String {
-	let inp = &mut get_input();
+pub fn part_one(input: String) -> String {
+	let inp = &mut parse_input(&input);
 	inp[1] = 12;
 	inp[2] = 2;
 	return run_intcode(inp)[0].to_string();
 }
-pub fn part_two() -> String {
-	let inp = &mut get_input();
+pub fn part_two(input: String) -> String {
+	let inp = &mut parse_input(&input);
 	for result in 0..9999 {
 		inp[1] = result / 100;
 		inp[2] = result % 100;
@@ -49,6 +46,7 @@ pub fn part_two() -> String {
 
 #[test]
 fn test() {
-	assert_eq!(part_one(), "5110675");
-	assert_eq!(part_two(), "4847");
+	let input = crate::common::get_input(2);
+	assert_eq!(part_one(input.clone()), "5110675");
+	assert_eq!(part_two(input.clone()), "4847");
 }

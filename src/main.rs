@@ -1,5 +1,6 @@
 use adventofcode2020::*;
 
+
 fn main() {
 	let all = [
 		[day01::part_one, day01::part_two],
@@ -29,6 +30,7 @@ fn main() {
 		[day25::part_one, day25::part_two],
 	];
 	for (day, [one, two]) in all.iter().enumerate() {
-	    println!("Day {}:\n\t1: {}\n\t2: {}", day, one(), two());
+		let input = common::get_input(day+1);
+		println!("Day {}:\n\t1: {}\n\t2: {}", day+1, one(input.clone()), two(input.clone()));
 	}
 }
