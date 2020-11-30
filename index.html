@@ -25,12 +25,13 @@
 	</pre>
 	<br>
 	<br>
+	<pre id="code" style="text-align: left; background-color: #f5f5f5;">
+	</pre>
 	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
 	<h2> TODO </h2>
-	<ul style="display: inline-block;">
-		<li> prefill input field </li>
-		<li> show timing </li>
-		<li> show code </li>
+	<ul style="display: inline-block; text-align: left;">
+		<li> colorize code </li>
+		<li> remove 2019 solutions for day 1 and 2</li>
 	</ul>
 	<script type="module">
 		import init, * as aoc from "./pkg/adventofcode2020.js";
@@ -39,6 +40,7 @@
 		const part = document.getElementById("part");
 		const input = document.getElementById("input");
 		const runButton = document.getElementById("run");
+		const code = document.getElementById("code");
 
 		for (let i = 2; i <= 25; i++) {
 			if (aoc[`day0${i}_part_one`] || aoc[`day0${i}_part_two`]) {
@@ -53,13 +55,32 @@
 				return;
 			}
 			try {
-				result.innerHTML = func(input.value);
+				const startTime = new Date();
+				result.innerText = func(input.value);
+				const endTime = new Date();
+				result.innerText += `\n Completed in ${(endTime - startTime)/1000}s`;
+
 			} catch(e) {
 				result.innerHTML = e.toString + "\n" + e.stack;
 			}
 		}
 		runButton.addEventListener("click", run);
 
+		function fetchInput() {
+			fetch(`input/day${day.value}.txt`)
+				.then(response => response.text())
+				.then(data => input.value = data);
+		}
+
+		function fetchCode() {
+			fetch(`src/day${day.value}.rs`)
+				.then(response => response.text())
+				.then(data => code.innerText = data);
+		}
+		day.addEventListener("change", fetchInput);
+		day.addEventListener("change", fetchCode);
+		fetchInput();
+		fetchCode();
 	</script>
 </body>
 </html>
