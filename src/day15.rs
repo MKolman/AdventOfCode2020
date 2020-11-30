@@ -1,6 +1,11 @@
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen(js_name = day15_part_one)]
 pub fn part_one(_: String) -> String {
 	return "Not implemented".to_string();
 }
+
+#[wasm_bindgen(js_name = day15_part_two)]
 pub fn part_two(_: String) -> String {
 	return "Not implemented".to_string();
 }

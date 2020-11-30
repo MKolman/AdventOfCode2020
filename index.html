@@ -108,7 +108,7 @@
 
 		function fetchInput() {
 			fetch(`input/day${day.value}.txt`)
-				.then(response => response.text())
+				.then(response => response.ok?response.text():"")
 				.then(data => input.value = data);
 		}
 
