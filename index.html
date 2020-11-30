@@ -32,7 +32,6 @@
 	<ul style="display: inline-block; text-align: left;">
 		<li> colorize code </li>
 		<li> remove 2019 solutions for day 1 and 2</li>
-		<li> fix 0 pad days for >= 10</li>
 		<li> add some style</li>
 	</ul>
 	<script type="module">
@@ -45,8 +44,9 @@
 		const code = document.getElementById("code");
 
 		for (let i = 2; i <= 25; i++) {
-			if (aoc[`day0${i}_part_one`] || aoc[`day0${i}_part_two`]) {
-				day.innerHTML += `<option value="0${i}">${i}</option>`
+			const twoi = ("0" + i).slice(-2);
+			if (aoc[`day${twoi}_part_one`] || aoc[`day${twoi}_part_two`]) {
+				day.innerHTML += `<option value="${twoi}">${i}</option>`
 			}
 		}
 		function run() {
