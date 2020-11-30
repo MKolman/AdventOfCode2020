@@ -1,3 +1,4 @@
+use wasm_bindgen::prelude::*;
 use std::str::FromStr;
 
 fn parse_input(input: &String) -> Vec<i64> {
@@ -26,12 +27,15 @@ fn run_intcode(code: & mut Vec<i64>) -> &mut Vec<i64> {
 	return code;
 }
 
+#[wasm_bindgen(js_name = day02_part_one)]
 pub fn part_one(input: String) -> String {
 	let inp = &mut parse_input(&input);
 	inp[1] = 12;
 	inp[2] = 2;
 	return run_intcode(inp)[0].to_string();
 }
+
+#[wasm_bindgen(js_name = day02_part_two)]
 pub fn part_two(input: String) -> String {
 	let inp = &mut parse_input(&input);
 	for result in 0..9999 {

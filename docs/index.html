@@ -1,0 +1,65 @@
+<html>
+<head>
+	<title> Maks Kolman's Advent of Code 2020 </title>
+</head>
+<body style="width: 1000px; text-align: center; margin: auto;">
+	<h1> Maks Kolman's Advent of Code 2020 </h1>
+	<h2> Written in rust, compiled to web assembly </h2>
+	Day:
+	<select id="day">
+		<option value="01">1</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	Part:
+	<select id="part">
+		<option value="one">1</option>
+		<option value="two">2</option>
+	</select>
+	<br>
+	<br>
+	<textarea cols="50" rows="10" id="input" placeholder="Paste your input here"></textarea>
+	<br>
+	<br>
+	<button id="run">Run</button>
+	<pre id="result">
+	</pre>
+	<br>
+	<br>
+	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
+	<h2> TODO </h2>
+	<ul style="display: inline-block;">
+		<li> prefill input field </li>
+		<li> show timing </li>
+		<li> show code </li>
+	</ul>
+	<script type="module">
+		import init, * as aoc from "./pkg/adventofcode2020.js";
+		init();
+		const day = document.getElementById("day");
+		const part = document.getElementById("part");
+		const input = document.getElementById("input");
+		const runButton = document.getElementById("run");
+
+		for (let i = 2; i <= 25; i++) {
+			if (aoc[`day0${i}_part_one`] || aoc[`day0${i}_part_two`]) {
+				day.innerHTML += `<option value="0${i}">${i}</option>`
+			}
+		}
+		function run() {
+			const funcName = `day${day.value}_part_${part.value}`;
+			const func = aoc[funcName];
+			if (!func) {
+				result.innerHTML = `The solution for ${funcName} does not exist.`;
+				return;
+			}
+			try {
+				result.innerHTML = func(input.value);
+			} catch(e) {
+				result.innerHTML = e.toString + "\n" + e.stack;
+			}
+		}
+		runButton.addEventListener("click", run);
+
+	</script>
+</body>
+</html>

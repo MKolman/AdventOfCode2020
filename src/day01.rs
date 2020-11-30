@@ -1,3 +1,4 @@
+use wasm_bindgen::prelude::*;
 use std::io::{Error, ErrorKind};
 use std::cmp;
 
@@ -7,6 +8,7 @@ fn parse_input(input: &String) -> Result<Vec<i64>, Error> {
 		.collect()
 }
 
+#[wasm_bindgen(js_name = day01_part_one)]
 pub fn part_one(input: String) -> String {
 
 	let vec = parse_input(&input).unwrap();
@@ -25,6 +27,7 @@ fn calc_fuel(mass: i64) -> i64 {
 	return result;
 }
 
+#[wasm_bindgen(js_name = day01_part_two)]
 pub fn part_two(input: String) -> String {
 	let vec = parse_input(&input).unwrap();
 	let result = vec.iter().fold(0, |total, mass| total + calc_fuel(*mass));
