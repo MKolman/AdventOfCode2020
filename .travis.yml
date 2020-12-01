@@ -1,0 +1,30 @@
+language: rust
+
+cache: cargo
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+install:
+  - cargo install wasm-pack
+
+jobs:
+  allow_failures:
+    - rust: nightly
+
+script:
+  - cargo build --verbose --all
+  - cargo test --verbose --all
+  - wasm-pack build --target web --release --out-dir pkg && rm pkg/.gitignore
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: .
+  keep_history: true
+  on:
+    branch: main
+    rust: stable
