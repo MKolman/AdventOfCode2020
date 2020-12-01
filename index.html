@@ -1,0 +1,133 @@
+<html>
+<head>
+	<title> Maks Kolman's Advent of Code 2020 </title>
+	<style>
+		body {
+			min-width: 500px;
+			width: 100%;
+			max-width: 1000px;
+			text-align: center;
+			margin: auto;
+		}
+		body, textarea {
+			background: #0f0f23;
+			color: #cccccc;
+		}
+		a, select, button {
+			background-color: transparent;
+			border: none;
+			color: #009900;
+			cursor: pointer;
+			font-size: larger;
+		}
+		option {
+			background-color: #0f0f23;
+		}
+		a:hover, select:hover, button:hover, option:hover {
+			color: #99ff99;
+		}
+		h1, h2 {
+			color: #00cc00;
+			text-shadow: 0 0 2px #00cc00, 0 0 3px #00cc00;
+		}
+		#code {
+			text-align: left;
+			background-color: #1b1b35;
+			margin: 1em;
+			padding: 1em;
+			display: block;
+			tab-size: 4;
+			-moz-tab-size: 4;
+		}
+	</style>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/styles/monokai-sublime.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/highlight.min.js"></script>
+</head>
+<body>
+	<h1> Maks Kolman's Advent of Code 2020 </h1>
+	<h2> Written in rust, compiled to web assembly </h2>
+	Day:
+	<select id="day">
+		<option value="01">1</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	Part:
+	<select id="part">
+		<option value="one">1</option>
+		<option value="two">2</option>
+	</select>
+	<br>
+	<br>
+	<textarea cols="50" rows="10" id="input" placeholder="Paste your input here"></textarea>
+	<br>
+	<br>
+	<button id="run">[Run]</button>
+	<pre id="result">
+	</pre>
+	<br>
+	<br>
+	<pre><code id="code" class="rust"></code></pre>
+	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
+	<h2 style="margin-bottom: 0;"> TODO </h2>
+	<ul style="display: inline-block; text-align: left;">
+		<li> remove 2019 solution for day 2 </li>
+		<li> set automatic deployment of this page </li>
+	</ul>
+	<script type="module">
+		import init, * as aoc from "./pkg/adventofcode2020.js";
+		init();
+		const day = document.getElementById("day");
+		const part = document.getElementById("part");
+		const input = document.getElementById("input");
+		const runButton = document.getElementById("run");
+		const code = document.getElementById("code");
+		const result = document.getElementById("result");
+
+		for (let i = 2; i <= 25; i++) {
+			const twoi = ("0" + i).slice(-2);
+			if (aoc[`day${twoi}_part_one`] || aoc[`day${twoi}_part_two`]) {
+				day.innerHTML += `<option value="${twoi}">${i}</option>`
+			}
+		}
+		function run() {
+			const funcName = `day${day.value}_part_${part.value}`;
+			const func = aoc[funcName];
+			if (!func) {
+				result.innerHTML = `The solution for ${funcName} does not exist.`;
+				return;
+			}
+			try {
+				result.style.color = "";
+				const startTime = Date.now();
+				result.innerText = func(input.value);
+				const endTime = Date.now();
+				result.innerText += `\n Completed in ${(endTime - startTime)/1000}s`;
+
+			} catch(e) {
+				result.style.color = "red";
+				result.innerHTML = e.toString + "\n" + e.stack;
+			}
+		}
+		runButton.addEventListener("click", run);
+
+		function fetchInput() {
+			fetch(`input/day${day.value}.txt`)
+				.then(response => response.ok?response.text():"")
+				.then(data => input.value = data);
+		}
+
+		function fetchCode() {
+			fetch(`src/day${day.value}.rs`)
+				.then(response => response.text())
+				.then(data => {
+					code.innerText = data;
+					hljs.highlightBlock(code);
+				});
+		}
+		day.addEventListener("change", fetchInput);
+		day.addEventListener("change", fetchCode);
+		fetchInput();
+		fetchCode();
+	</script>
+</body>
+</html>
