@@ -36,8 +36,12 @@
 			margin: 1em;
 			padding: 1em;
 			display: block;
+			tab-size: 4;
+			-moz-tab-size: 4;
 		}
 	</style>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/styles/monokai-sublime.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/highlight.min.js"></script>
 </head>
 <body>
 	<h1> Maks Kolman's Advent of Code 2020 </h1>
@@ -62,11 +66,10 @@
 	</pre>
 	<br>
 	<br>
-	<pre><code id="code"></code></pre>
+	<pre><code id="code" class="rust"></code></pre>
 	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
 	<h2 style="margin-bottom: 0;"> TODO </h2>
 	<ul style="display: inline-block; text-align: left;">
-		<li> colorize code </li>
 		<li> remove 2019 solution for day 2 </li>
 		<li> set automatic deployment of this page </li>
 	</ul>
@@ -116,7 +119,10 @@
 		function fetchCode() {
 			fetch(`src/day${day.value}.rs`)
 				.then(response => response.text())
-				.then(data => code.innerText = data);
+				.then(data => {
+					code.innerText = data;
+					hljs.highlightBlock(code);
+				});
 		}
 		day.addEventListener("change", fetchInput);
 		day.addEventListener("change", fetchCode);
