@@ -40,12 +40,14 @@
 			-moz-tab-size: 4;
 		}
 	</style>
+	<!-- Syntax highlighting -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/styles/monokai-sublime.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/highlight.min.js"></script>
 </head>
 <body>
 	<h1> Maks Kolman's Advent of Code 2020 </h1>
 	<h2> Written in rust, compiled to web assembly </h2>
+
 	Day:
 	<select id="day">
 		<option value="01">1</option>
@@ -56,23 +58,30 @@
 		<option value="one">1</option>
 		<option value="two">2</option>
 	</select>
-	<br>
-	<br>
+
+	<br><br>
+
 	<textarea cols="50" rows="10" id="input" placeholder="Paste your input here"></textarea>
-	<br>
-	<br>
+
+	<br><br>
+
 	<button id="run">[Run]</button>
+
 	<pre id="result">
 	</pre>
-	<br>
-	<br>
+
+	<br><br>
+
 	<pre><code id="code" class="rust"></code></pre>
+
 	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
+
 	<h2 style="margin-bottom: 0;"> TODO </h2>
 	<ul style="display: inline-block; text-align: left;">
 		<li> remove 2019 solution for day 2 </li>
 		<li> set automatic deployment of this page </li>
 	</ul>
+
 	<script type="module">
 		import init, * as aoc from "./pkg/adventofcode2020.js";
 		init();
@@ -124,10 +133,33 @@
 					hljs.highlightBlock(code);
 				});
 		}
-		day.addEventListener("change", fetchInput);
-		day.addEventListener("change", fetchCode);
+
+		function setUrl() {
+			const urlParams = new URLSearchParams(window.location.search);
+			urlParams.set("day", day.value);
+			urlParams.set("part", part.value);
+			window.history.replaceState(null, null, "?" + urlParams.toString());
+		}
+
+		function loadUrl() {
+			const urlParams = new URLSearchParams(location.search);
+			if (day.querySelector(`[value="${urlParams.get('day')}"]`)) {
+				day.value = urlParams.get('day');
+			}
+			if (part.querySelector(`[value="${urlParams.get('part')}"]`)) {
+				part.value = urlParams.get('part');
+			}
+		}
+
+		loadUrl();
 		fetchInput();
 		fetchCode();
+
+		day.addEventListener("change", fetchInput);
+		day.addEventListener("change", fetchCode);
+		day.addEventListener("change", setUrl);
+		part.addEventListener("change", setUrl);
+
 	</script>
 </body>
 </html>
