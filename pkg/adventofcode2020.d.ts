@@ -54,22 +54,22 @@ export function day17_part_two(arg0: string): string;
 * @param {string} input
 * @returns {string}
 */
-export function day02_part_one(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
-export function day02_part_two(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
 export function day01_part_one(input: string): string;
 /**
 * @param {string} input
 * @returns {string}
 */
 export function day01_part_two(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day02_part_one(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day02_part_two(input: string): string;
 /**
 * @param {string} arg0
 * @returns {string}
@@ -265,10 +265,10 @@ export interface InitOutput {
   readonly day15_part_two: (a: number, b: number, c: number) => void;
   readonly day17_part_one: (a: number, b: number, c: number) => void;
   readonly day17_part_two: (a: number, b: number, c: number) => void;
-  readonly day02_part_one: (a: number, b: number, c: number) => void;
-  readonly day02_part_two: (a: number, b: number, c: number) => void;
   readonly day01_part_one: (a: number, b: number, c: number) => void;
   readonly day01_part_two: (a: number, b: number, c: number) => void;
+  readonly day02_part_one: (a: number, b: number, c: number) => void;
+  readonly day02_part_two: (a: number, b: number, c: number) => void;
   readonly day08_part_one: (a: number, b: number, c: number) => void;
   readonly day08_part_two: (a: number, b: number, c: number) => void;
   readonly day11_part_one: (a: number, b: number, c: number) => void;

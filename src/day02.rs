@@ -1,56 +1,47 @@
 use wasm_bindgen::prelude::*;
-use std::str::FromStr;
 
-fn parse_input(input: &String) -> Vec<i64> {
-	input.trim()
-		.split(",").map(|s| i64::from_str(s).unwrap())
+fn parse_input(input: &String) -> Vec<(i64, i64, char, String)> {
+	input.lines()
+		.map(|s| {
+			let parts: Vec<&str> = s.split(' ').collect();
+			let limits: Vec<&str> = parts[0].split('-').collect();
+			return (
+				limits[0].parse().unwrap(),
+				limits[1].parse().unwrap(),
+				parts[1].chars().nth(0).unwrap(),
+				parts[2].to_string()
+			);
+		})
 		.collect()
-}
-
-fn run_intcode(code: & mut Vec<i64>) -> &mut Vec<i64> {
-	let mut i = 0;
-	loop {
-		match code[i] {
-			99 => break,
-			1 | 2 => {
-				let idx = code[i+3] as usize;
-				match code[i] {
-					1 => code[idx] = code[code[i+1] as usize] + code[code[i+2] as usize],
-					2 => code[idx] = code[code[i+1] as usize] * code[code[i+2] as usize],
-					_ => panic!("What??"),
-				}
-				i += 4;
-			},
-			_ => panic!("Unknown intcode"),
-		}
-	}
-	return code;
 }
 
 #[wasm_bindgen(js_name = day02_part_one)]
 pub fn part_one(input: String) -> String {
-	let inp = &mut parse_input(&input);
-	inp[1] = 12;
-	inp[2] = 2;
-	return run_intcode(inp)[0].to_string();
+	let inp = &parse_input(&input);
+	let mut result = 0;
+	for (min, max, c, pass) in inp {
+		let cnt = pass.matches(&c.to_string()).count() as i64;
+		result += (min <= &cnt && max >= &cnt) as i64;
+	}
+	return result.to_string();
 }
 
 #[wasm_bindgen(js_name = day02_part_two)]
 pub fn part_two(input: String) -> String {
-	let inp = &mut parse_input(&input);
-	for result in 0..9999 {
-		inp[1] = result / 100;
-		inp[2] = result % 100;
-		if run_intcode(&mut inp.clone())[0] == 19690720 {
-			return result.to_string();
-		}
+	let inp = &parse_input(&input);
+	let mut result = 0;
+	for (min, max, c, pass) in inp {
+		result += (
+			(pass.chars().nth((min-1) as usize) == Some(*c)) ^
+			(pass.chars().nth((max-1) as usize) == Some(*c))
+		) as i64;
 	}
-	return "0".to_string();
+	return result.to_string();
 }
 
 #[test]
 fn test() {
 	let input = crate::common::get_input(2);
-	assert_eq!(part_one(input.clone()), "5110675");
-	assert_eq!(part_two(input.clone()), "4847");
+	assert_eq!(part_one(input.clone()), "517");
+	assert_eq!(part_two(input.clone()), "284");
 }
