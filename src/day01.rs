@@ -1,17 +1,16 @@
 use wasm_bindgen::prelude::*;
 use std::collections::HashSet;
-use std::io::{Error, ErrorKind};
 
-fn parse_input(input: &String) -> Result<Vec<i64>, Error> {
+fn parse_input(input: &String) -> Vec<i64> {
 	input.lines()
-		.map(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e)))
+		.map(|v| v.parse().unwrap())
 		.collect()
 }
 
 #[wasm_bindgen(js_name = day01_part_one)]
 pub fn part_one(input: String) -> String {
 	let mut set = HashSet::new();
-	let vec = parse_input(&input).unwrap();
+	let vec = parse_input(&input);
 	for n in vec {
 		if set.contains(&(2020 - n)) {
 			return (n * (2020-n)).to_string();
@@ -25,7 +24,7 @@ pub fn part_one(input: String) -> String {
 #[wasm_bindgen(js_name = day01_part_two)]
 pub fn part_two(input: String) -> String {
 	let mut set = HashSet::new();
-	let vec = parse_input(&input).unwrap();
+	let vec = parse_input(&input);
 	for (i, n) in vec.iter().enumerate() {
 		for m in &vec[i+1..vec.len()] {
 			if set.contains(&(2020 - n - m)) {
