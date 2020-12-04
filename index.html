@@ -30,10 +30,11 @@
 			color: #00cc00;
 			text-shadow: 0 0 2px #00cc00, 0 0 3px #00cc00;
 		}
-		#code {
+		#code, #golf {
 			text-align: left;
 			background-color: #1b1b35;
 			margin: 1em;
+			margin-bottom: 3em;
 			padding: 1em;
 			display: block;
 			tab-size: 4;
@@ -70,9 +71,10 @@
 	<pre id="result">
 	</pre>
 
-	<br><br>
-
 	<pre><code id="code" class="rust"></code></pre>
+
+	<h3 id="golftitle">Golf</h3>
+	<pre><code id="golf" class="python"></code></pre>
 
 	<a href="https://github.com/MKolman/AdventOfCode2020"> Hosted on GitHub </a>
 
@@ -89,6 +91,8 @@
 		const input = document.getElementById("input");
 		const runButton = document.getElementById("run");
 		const code = document.getElementById("code");
+		const golf = document.getElementById("golf");
+		const golftitle = document.getElementById("golftitle");
 		const result = document.getElementById("result");
 
 		for (let i = 2; i <= 25; i++) {
@@ -133,6 +137,23 @@
 				});
 		}
 
+		function fetchGolf() {
+			fetch(`golf/day${day.value}.py`)
+				.then(response => response.ok?response.text():"")
+				.then(data => {
+					if (data.length > 0) {
+						golf.innerText = data;
+						golftitle.innerText = `Golf (${data.length} bytes)`;
+						hljs.highlightBlock(golf);
+						golf.style.display = "";
+						golftitle.style.display = "";
+					} else {
+						golf.style.display = "none";
+						golftitle.style.display = "none";
+					}
+				});
+		}
+
 		function setUrl() {
 			const urlParams = new URLSearchParams(window.location.search);
 			urlParams.set("day", day.value);
@@ -153,9 +174,11 @@
 		loadUrl();
 		fetchInput();
 		fetchCode();
+		fetchGolf();
 
 		day.addEventListener("change", fetchInput);
 		day.addEventListener("change", fetchCode);
+		day.addEventListener("change", fetchGolf);
 		day.addEventListener("change", setUrl);
 		part.addEventListener("change", setUrl);
 
