@@ -120,7 +120,6 @@
 				result.innerHTML = e.toString + "\n" + e.stack;
 			}
 		}
-		runButton.addEventListener("click", run);
 
 		function fetchInput() {
 			fetch(`input/day${day.value}.txt`)
@@ -171,11 +170,13 @@
 			}
 		}
 
+		hljs.configure({useBR: true});
 		loadUrl();
 		fetchInput();
 		fetchCode();
 		fetchGolf();
 
+		runButton.addEventListener("click", run);
 		day.addEventListener("change", fetchInput);
 		day.addEventListener("change", fetchCode);
 		day.addEventListener("change", fetchGolf);
