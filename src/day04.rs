@@ -48,7 +48,6 @@ pub fn part_two(input: String) -> String {
 		if pass.len() as i64 - (pass.contains_key("cid") as i64) == 7 {
 			result += 1;
 			for (key, rule) in &rules {
-				// println!("{}, {:?}", key, pass);
 				if !rule.is_match(pass.get(&key.to_string()).unwrap()) {
 					result -= 1;
 					break;
