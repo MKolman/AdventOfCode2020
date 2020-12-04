@@ -2,20 +2,13 @@ use std::collections::HashMap;
 use regex::Regex;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<HashMap<String, String>> {
-	let mut result = vec![HashMap::new()];
-	let mut size = 0;
-	for line in input.lines() {
-		if line.trim() == "" {
-			size += 1;
-			result.push(HashMap::new());
-		}
-		for kv in line.split_whitespace() {
+fn parse_input(input: &String) -> Vec<HashMap<&str, &str>> {
+	input.split("\n\n").map(|passport| {
+		passport.split_whitespace().map(|kv| {
 			let pair: Vec<&str> = kv.split(':').collect();
-			result[size].insert(pair[0].to_string(), pair[1].to_string());
-		}
-	}
-	return result;
+			(pair[0], pair[1])
+		}).collect()
+	}).collect()
 }
 
 #[wasm_bindgen(js_name = day04_part_one)]
@@ -48,7 +41,7 @@ pub fn part_two(input: String) -> String {
 		if pass.len() as i64 - (pass.contains_key("cid") as i64) == 7 {
 			result += 1;
 			for (key, rule) in &rules {
-				if !rule.is_match(pass.get(&key.to_string()).unwrap()) {
+				if !rule.is_match(pass.get(key).unwrap()) {
 					result -= 1;
 					break;
 				}
