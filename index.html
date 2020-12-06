@@ -131,7 +131,7 @@
 			fetch(`src/day${day.value}.rs`)
 				.then(response => response.text())
 				.then(data => {
-					code.innerText = data;
+					code.innerHTML = data;
 					hljs.highlightBlock(code);
 				});
 		}
@@ -141,7 +141,7 @@
 				.then(response => response.ok?response.text():"")
 				.then(data => {
 					if (data.length > 0) {
-						golf.innerText = data;
+						golf.innerHTML = data;
 						golftitle.innerText = `Golf (${data.length} bytes)`;
 						hljs.highlightBlock(golf);
 						golf.style.display = "";
@@ -170,7 +170,6 @@
 			}
 		}
 
-		hljs.configure({useBR: true});
 		loadUrl();
 		fetchInput();
 		fetchCode();
