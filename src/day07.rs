@@ -40,7 +40,6 @@ pub fn part_one(input: String) -> String {
 			}
 		}
 	}
-	println!("{:?}", visited);
 	return (visited.len()-1).to_string();
 }
 
