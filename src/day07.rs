@@ -47,17 +47,16 @@ pub fn part_one(input: String) -> String {
 #[wasm_bindgen(js_name = day07_part_two)]
 pub fn part_two(input: String) -> String {
 	let graph = parse_input(&input);
-	let mut count = 0;
-	let mut queue = VecDeque::new();
-	queue.push_back((1, "shiny gold".to_string()));
-	while queue.len() > 0 {
-		let (mul, color) = queue.pop_front().unwrap();
-		for (num, clr) in &graph[&color.to_string()] {
-			count += mul*num;
-			queue.push_back((mul*num, clr.to_string()));
+	fn inside(color: &String, graph: &HashMap<String, Vec<(u16, String)>>, memo: &mut HashMap<String, u64>) -> u64 {
+		if !memo.contains_key(color) {
+			let val = graph[color].iter().map(|(num, clr)| {
+				(*num as u64)+(*num as u64)*inside(clr, graph, memo)
+			}).sum();
+			memo.insert(color.to_string(), val);
 		}
-	}
-	return count.to_string();
+		return memo[color];
+	};
+	return inside(&"shiny gold".to_string(), &graph, &mut HashMap::new()).to_string();
 }
 
 #[test]
