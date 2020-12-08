@@ -1,3 +1,4 @@
+use std::time::Instant;
 use adventofcode2020::*;
 
 
@@ -29,8 +30,18 @@ fn main() {
 		[day24::part_one, day24::part_two],
 		[day25::part_one, day25::part_two],
 	];
+	let start = Instant::now();
 	for (day, [one, two]) in all.iter().enumerate() {
 		let input = common::get_input(day+1);
-		println!("Day {}:\n\t1: {}\n\t2: {}", day+1, one(input.clone()), two(input.clone()));
+		println!("Day {}:", day+1);
+		let start_one = Instant::now();
+		let sol_one = one(input.clone());
+		let dur_one = start_one.elapsed();
+		println!("\t1: {} ({:?})", sol_one, dur_one);
+		let start_two = Instant::now();
+		let sol_two = two(input.clone());
+		let dur_two = start_two.elapsed();
+		println!("\t2: {} ({:?})", sol_two, dur_two);
 	}
+	println!("Total time: {:?}", start.elapsed());
 }
