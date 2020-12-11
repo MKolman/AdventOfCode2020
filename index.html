@@ -125,6 +125,15 @@
 			}
 		}
 
+		function esc(str) {
+			return str
+				.replace(/&/g, "&amp;")
+				.replace(/</g, "&lt;")
+				.replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;")
+				.replace(/'/g, "&#039;");
+		}
+
 		function fetchInput() {
 			fetch(`input/day${day.value}.txt`)
 				.then(response => response.ok?response.text():"")
@@ -135,7 +144,7 @@
 			fetch(`src/day${day.value}.rs`)
 				.then(response => response.text())
 				.then(data => {
-					code.innerHTML = data;
+					code.innerHTML = esc(data);
 					hljs.highlightBlock(code);
 				});
 		}
@@ -145,7 +154,7 @@
 				.then(response => response.ok?response.text():"")
 				.then(data => {
 					if (data.length > 0) {
-						golf.innerHTML = data;
+						golf.innerHTML = esc(data);
 						golftitle.innerText = `Golf (${data.length} bytes)`;
 						hljs.highlightBlock(golf);
 						golf.style.display = "";
