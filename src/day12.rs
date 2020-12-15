@@ -1,6 +1,4 @@
-use std::ops::Mul;
-use std::ops::AddAssign;
-use std::ops::MulAssign;
+use std::ops::{Mul, AddAssign, MulAssign};
 use wasm_bindgen::prelude::*;
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
@@ -22,7 +20,7 @@ impl Complex {
 			-90 | 270 => Complex::new(0, -1),
 			180 | -180 => Complex::new(-1, 0),
 			0 | 360 => Complex::new(1, 0),
-			_ => panic!("Can't rotate like that"),
+			_ => panic!(format!("Can't rotate like that: {}", deg)),
 		}
     }
 }
