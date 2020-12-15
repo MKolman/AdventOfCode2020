@@ -1,21 +1,25 @@
-use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
 fn solve(input: &String, length: usize) -> String {
-	let mut last: HashMap<u64, usize> = HashMap::new();
-	let nums: Vec<u64> = input.split(",").map(|n| n.parse().unwrap()).collect();
-	for (i, n) in nums[..nums.len()-1].iter().enumerate() {
-		last.insert(*n, i);
-	}
-	let mut prev = nums[nums.len()-1];
-	for i in nums.len()-1..length-1 {
-		println!("{:?}", prev);
-		if last.contains_key(&prev) {
-			let next = i - *last.get(&prev).unwrap();
-			last.insert(prev, i);
-			prev = next as u64;
+	let unseen = length+1;
+	let mut seen = vec![unseen; length];
+	let start_len = input.matches(",").count();
+	let mut prev = 0;
+	for (i, n) in input.split(",").enumerate() {
+		let p = n.parse().unwrap();
+		if i == start_len {
+			prev = p;
 		} else {
-			last.insert(prev, i);
+			seen[p] = i;
+		}
+	}
+	for i in start_len..length-1 {
+		if seen[prev] != unseen {
+			let next = i - seen[prev];
+			seen[prev] = i;
+			prev = next;
+		} else {
+			seen[prev] = i;
 			prev = 0;
 		}
 	}
