@@ -1,17 +1,44 @@
 use wasm_bindgen::prelude::*;
 
+fn solve(input: &String, length: usize) -> String {
+	let unseen = length+1;
+	let mut seen = vec![unseen; length];
+	let start_len = input.matches(",").count();
+	let mut prev = 0;
+	for (i, n) in input.split(",").enumerate() {
+		let p = n.parse().unwrap();
+		if i == start_len {
+			prev = p;
+		} else {
+			seen[p] = i;
+		}
+	}
+	for i in start_len..length-1 {
+		if seen[prev] != unseen {
+			let next = i - seen[prev];
+			seen[prev] = i;
+			prev = next;
+		} else {
+			seen[prev] = i;
+			prev = 0;
+		}
+	}
+	return prev.to_string();
+}
+
 #[wasm_bindgen(js_name = day15_part_one)]
-pub fn part_one(_: String) -> String {
-	return "Not implemented".to_string();
+pub fn part_one(input: String) -> String {
+	return solve(&input, 2020);
 }
 
 #[wasm_bindgen(js_name = day15_part_two)]
-pub fn part_two(_: String) -> String {
-	return "Not implemented".to_string();
+pub fn part_two(input: String) -> String {
+	return solve(&input, 30000000);
 }
 
 #[test]
 fn test() {
-	assert_eq!(part_one("".to_string()), "Not implemented".to_string());
-	assert_eq!(part_two("".to_string()), "Not implemented".to_string());
+	let input = crate::common::get_input(15);
+	assert_eq!(part_one(input.clone()), "492".to_string());
+	assert_eq!(part_two(input.clone()), "63644".to_string());
 }
