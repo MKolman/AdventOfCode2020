@@ -3,14 +3,14 @@
 export const memory: WebAssembly.Memory;
 export function day02_part_one(a: number, b: number, c: number): void;
 export function day02_part_two(a: number, b: number, c: number): void;
-export function day12_part_one(a: number, b: number, c: number): void;
-export function day12_part_two(a: number, b: number, c: number): void;
 export function day18_part_one(a: number, b: number, c: number): void;
 export function day18_part_two(a: number, b: number, c: number): void;
-export function day15_part_one(a: number, b: number, c: number): void;
-export function day15_part_two(a: number, b: number, c: number): void;
 export function day19_part_one(a: number, b: number, c: number): void;
 export function day19_part_two(a: number, b: number, c: number): void;
+export function day12_part_one(a: number, b: number, c: number): void;
+export function day12_part_two(a: number, b: number, c: number): void;
+export function day15_part_one(a: number, b: number, c: number): void;
+export function day15_part_two(a: number, b: number, c: number): void;
 export function day11_part_one(a: number, b: number, c: number): void;
 export function day11_part_two(a: number, b: number, c: number): void;
 export function day06_part_one(a: number, b: number, c: number): void;

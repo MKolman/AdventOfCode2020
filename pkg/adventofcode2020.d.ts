@@ -14,16 +14,6 @@ export function day02_part_two(input: string): string;
 * @param {string} input
 * @returns {string}
 */
-export function day12_part_one(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
-export function day12_part_two(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
 export function day18_part_one(input: string): string;
 /**
 * @param {string} input
@@ -34,22 +24,32 @@ export function day18_part_two(input: string): string;
 * @param {string} input
 * @returns {string}
 */
-export function day15_part_one(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
-export function day15_part_two(input: string): string;
-/**
-* @param {string} input
-* @returns {string}
-*/
 export function day19_part_one(input: string): string;
 /**
 * @param {string} input
 * @returns {string}
 */
 export function day19_part_two(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day12_part_one(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day12_part_two(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day15_part_one(input: string): string;
+/**
+* @param {string} input
+* @returns {string}
+*/
+export function day15_part_two(input: string): string;
 /**
 * @param {string} input
 * @returns {string}
@@ -257,14 +257,14 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly day02_part_one: (a: number, b: number, c: number) => void;
   readonly day02_part_two: (a: number, b: number, c: number) => void;
-  readonly day12_part_one: (a: number, b: number, c: number) => void;
-  readonly day12_part_two: (a: number, b: number, c: number) => void;
   readonly day18_part_one: (a: number, b: number, c: number) => void;
   readonly day18_part_two: (a: number, b: number, c: number) => void;
-  readonly day15_part_one: (a: number, b: number, c: number) => void;
-  readonly day15_part_two: (a: number, b: number, c: number) => void;
   readonly day19_part_one: (a: number, b: number, c: number) => void;
   readonly day19_part_two: (a: number, b: number, c: number) => void;
+  readonly day12_part_one: (a: number, b: number, c: number) => void;
+  readonly day12_part_two: (a: number, b: number, c: number) => void;
+  readonly day15_part_one: (a: number, b: number, c: number) => void;
+  readonly day15_part_two: (a: number, b: number, c: number) => void;
   readonly day11_part_one: (a: number, b: number, c: number) => void;
   readonly day11_part_two: (a: number, b: number, c: number) => void;
   readonly day06_part_one: (a: number, b: number, c: number) => void;
