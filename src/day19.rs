@@ -10,42 +10,33 @@ fn calc_rules<'a>(i: usize, mut rules_memo: &'a mut Vec<String>, rules: &Vec<&st
 	}
 	rules_memo[i] += "r";
 	let sub: Vec<&str> = rules[i].split(":").collect::<Vec<&str>>()[1].split_whitespace().collect();
-	let mut result = "".to_string();
-	if rules[i].contains("|") {
-		result += "(";
-	}
-	for j in 0..sub.len() {
-		if let Ok(n) = sub[j].parse::<usize>() {
+	let mut result = "(".to_string();
+	for part in sub {
+		if let Ok(n) = part.parse::<usize>() {
 			rules_memo = calc_rules(n, rules_memo, rules);
 			result += &rules_memo[n];
 		} else {
-			result += sub[j].trim_matches('"');
+			result += part.trim_matches('"');
 		}
 	}
 
-	if rules[i].contains("|") {
-		result += ")";
-	}
-	rules_memo[i] = result;
+	rules_memo[i] = result + ")";
 	return rules_memo;
 }
 
 #[wasm_bindgen(js_name = day19_part_one)]
 pub fn part_one(input: String) -> String {
-	let mut rules = Vec::new();
-	let mut lines = Vec::new();
-	let mut first_part = true;
-	for line in input.lines() {
-		if line == "" { first_part = false; }
-		else if first_part { rules.push(line); }
-		else { lines.push(line); }
-	}
+	let parts: Vec<&str> = input.split("\n\n").collect();
+
+	let mut rules: Vec<&str> = parts[0].lines().collect();
 	rules.sort_by_key(|line| line.split(":").next().unwrap().parse::<usize>().unwrap());
-	let mut rules_memo = &mut vec!["".to_string(); rules.len()];
+
+	let mut rules_memo = &mut vec![String::new(); rules.len()];
 	rules_memo = calc_rules(0, rules_memo, &rules);
+
 	let re = Regex::new(&format!("^{}$", rules_memo[0])).unwrap();
 	let mut result = 0;
-	for line in lines {
+	for line in parts[1].lines() {
 		if re.is_match(line) {
 			result += 1;
 		}
