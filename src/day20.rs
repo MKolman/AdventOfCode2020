@@ -3,7 +3,6 @@ use wasm_bindgen::prelude::*;
 
 type BorderHash = usize;
 
-
 const N: usize = 0;
 const E: usize = 1;
 const S: usize = 2;
@@ -16,6 +15,7 @@ struct Tile {
 	borders: [BorderHash; 4],
 	neighbours: [Option<usize>; 4]
 }
+
 impl Tile {
 	fn new(id: usize, val: Vec<Vec<bool>>) -> Tile {
 		let borders = hash_borders(&val);
@@ -47,7 +47,9 @@ impl Tile {
 	}
 
 	fn no_border(&self) -> Vec<Vec<bool>> {
-		return self.val[1..=8].iter().map(|r| r[1..=8].iter().map(|c| *c).collect()).collect();
+		return self.val[1..=8].iter().map(
+			|r| r[1..=8].iter().map(|c| *c).collect()
+		).collect();
 	}
 }
 
@@ -80,10 +82,10 @@ fn reverse_border_hash(mut hash: usize) -> usize {
 		hash /= 2;
 	}
 	return result;
-
 }
 
 fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
+	// Step 1: map borders to tiles for quick matchfinding
 	let mut border_to_tile: HashMap<BorderHash, Vec<usize>> = HashMap::new();
 	for (i, tile) in tiles.iter().enumerate() {
 		for border in &tile.borders {
@@ -95,12 +97,14 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 		}
 	}
 
+	// Step 2: actually match tiles with their neighbours
 	let mut visited = HashSet::new();
 	visited.insert(0);
 	let mut stack = vec![0];
 	while stack.len() > 0 {
 		let id = stack.pop().unwrap();
 		'side: for side in 0..4 {
+			if tiles[id].neighbours[side] != None { continue; }
 			let border = tiles[id].borders[side];
 			let reverse = reverse_border_hash(border);
 			let symetric_hash = border + reverse;
@@ -223,12 +227,11 @@ pub fn part_two(input: String) -> String {
 		}
 	}
 
-
 	let full = build_full_map(&tiles, top_left);
 	let mut num_hash = 0;
 	for row in &full { for cell in row { num_hash += *cell as usize; } }
-	let count_monsters = find_monsters(full);
-	return (num_hash - count_monsters*15).to_string();
+	let num_monsters = find_monsters(full);
+	return (num_hash - num_monsters*15).to_string();
 }
 
 #[test]
