@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use wasm_bindgen::prelude::*;
 
 type BorderHash = usize;
@@ -72,7 +72,29 @@ fn parse_input(input: &String) -> Vec<Tile> {
 	return find_neighbours(result);
 }
 
+fn reverse_border_hash(mut hash: usize) -> usize {
+	let mut result = 0;
+	for _ in 0..10 {
+		result *= 2;
+		result += hash & 1;
+		hash /= 2;
+	}
+	return result;
+
+}
+
 fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
+	let mut border_to_tile: HashMap<BorderHash, Vec<usize>> = HashMap::new();
+	for (i, tile) in tiles.iter().enumerate() {
+		for border in &tile.borders {
+			let symetric_hash = border + reverse_border_hash(*border);
+			match border_to_tile.get_mut(&symetric_hash) {
+				Some(val) => val.push(i),
+				None => {border_to_tile.insert(symetric_hash, vec![i]);},
+			};
+		}
+	}
+
 	let mut visited = HashSet::new();
 	visited.insert(0);
 	let mut stack = vec![0];
@@ -80,23 +102,25 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 		let id = stack.pop().unwrap();
 		'side: for side in 0..4 {
 			let border = tiles[id].borders[side];
+			let reverse = reverse_border_hash(border);
+			let symetric_hash = border + reverse;
 			let opposite = (side + 2) % 4;
-			for i in 0..tiles.len() {
-				if i == id { continue; }
-				for _ in 0..2 {
-					for _ in 0..4 {
-						if tiles[i].borders[opposite] == border {
-							if !visited.contains(&i) {
-								stack.push(i);
-								visited.insert(i);
-							}
-							tiles[id].neighbours[side] = Some(i);
-							tiles[i].neighbours[opposite] = Some(id);
-							continue 'side;
-						}
-						tiles[i].rotate();
+			for i in border_to_tile.get(&symetric_hash).unwrap() {
+				if *i == id { continue; }
+				for _ in 0..4 {
+					if tiles[*i].borders[opposite] == reverse {
+						tiles[*i].flip();
 					}
-					tiles[i].flip();
+					if tiles[*i].borders[opposite] == border {
+						if !visited.contains(&i) {
+							stack.push(*i);
+							visited.insert(*i);
+						}
+						tiles[id].neighbours[side] = Some(*i);
+						tiles[*i].neighbours[opposite] = Some(id);
+						continue 'side;
+					}
+					tiles[*i].rotate();
 				}
 			}
 		}
@@ -104,7 +128,7 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 	return tiles;
 }
 
-fn hash_one(border: &Vec<bool>) -> BorderHash {
+fn hash_one_border(border: &Vec<bool>) -> BorderHash {
 	let mut hash = 0;
 	for v in border {
 		hash = hash*2 + *v as usize;
@@ -115,11 +139,65 @@ fn hash_one(border: &Vec<bool>) -> BorderHash {
 fn hash_borders(tile: &Vec<Vec<bool>>) -> [BorderHash; 4] {
 	let (w, h) = (tile[0].len(), tile.len());
 	let mut result = [0; 4];
-	result[N] = hash_one(&tile[0]);
-	result[W] = hash_one(&tile.iter().map(|row| row[0]).collect());
-	result[E] = hash_one(&tile.iter().map(|row| row[w-1]).collect());
-	result[S] = hash_one(&tile[h-1]);
+	result[N] = hash_one_border(&tile[0]);
+	result[W] = hash_one_border(&tile.iter().map(|row| row[0]).collect());
+	result[E] = hash_one_border(&tile.iter().map(|row| row[w-1]).collect());
+	result[S] = hash_one_border(&tile[h-1]);
 	return result;
+}
+
+fn build_full_map(tiles: &Vec<Tile>, top_left: usize) -> Vec<Vec<bool>> {
+	// Keep track of current tile and first tile in current row
+	let (mut cur, mut first) = (top_left, top_left);
+	let mut full = tiles[top_left].no_border();
+	let height = full.len();
+	loop {
+		if let Some(n) = tiles[cur].neighbours[E] {
+			cur = n;
+			let row = full.len()-height;
+			for (i, r) in tiles[n].no_border().iter_mut().enumerate() {
+				full[row+i].append(r);
+			}
+		} else if let Some(n) = tiles[first].neighbours[S] {
+			first = n;
+			cur = n;
+			full.append(&mut tiles[n].no_border());
+		} else {
+			break;
+		}
+	}
+	return full;
+}
+
+fn find_monsters(mut full: Vec<Vec<bool>>) -> usize {
+	let mut count_monsters = 0;
+	let monster: Vec<Vec<char>> = vec![
+		"                  # ".chars().collect(),
+		"#    ##    ##    ###".chars().collect(),
+		" #  #  #  #  #  #   ".chars().collect(),
+	];
+	for _ in 0..2 {
+		for _ in 0..4 {
+			for row in 0..full.len()-monster.len() {
+				'start: for col in 0..full[0].len()-monster[0].len() {
+					for r in 0..monster.len() {
+						for c in 0..monster[0].len() {
+							if monster[r][c] == '#' && !full[row+r][col+c] {
+								continue 'start;
+							}
+						}
+					}
+					count_monsters += 1;
+				}
+			}
+			if count_monsters > 0 { return count_monsters; }
+			full = rotate(&full);
+		}
+		for row in full.iter_mut() {
+			row.reverse();
+		}
+	}
+	return 0;
 }
 
 #[wasm_bindgen(js_name = day20_part_one)]
@@ -137,58 +215,20 @@ pub fn part_one(input: String) -> String {
 #[wasm_bindgen(js_name = day20_part_two)]
 pub fn part_two(input: String) -> String {
 	let tiles = parse_input(&input);
-	let mut start = 0;
+	// Find top left tile to start building grid
+	let mut top_left = 0;
 	for (i, tile) in tiles.iter().enumerate() {
 		if tile.neighbours[N] == None && tile.neighbours[W] == None {
-			start = i;
+			top_left = i;
 		}
 	}
-	let mut grid = vec![vec![start]];
-	let mut full = tiles[start].no_border();
-	let height = full.len();
-	loop {
-		let row = grid.len() - 1;
-		if let Some(n) = tiles[*grid[row].last().unwrap()].neighbours[E] {
-			grid.last_mut().unwrap().push(n);
-			for (i, r) in tiles[n].no_border().iter_mut().enumerate() {
-				full[i+row*height].append(r);
-			}
-		} else if let Some(n) = tiles[grid[row][0]].neighbours[S] {
-			grid.push(vec![n]);
-			full.append(&mut tiles[n].no_border());
-		} else {
-			break;
-		}
-	}
-	let mut count_monsters = 0;
-	let monster: Vec<Vec<char>> = vec![
-		"                  # ".chars().collect(),
-		"#    ##    ##    ###".chars().collect(),
-		" #  #  #  #  #  #   ".chars().collect(),
-	];
-	'outer: for _ in 0..2 {
-		for _ in 0..4 {
-			for row in 0..full.len()-monster.len() {
-				'start: for col in 0..full[0].len()-monster[0].len() {
-					for r in 0..monster.len() {
-						for c in 0..monster[0].len() {
-							if monster[r][c] == '#' && !full[row+r][col+c] {
-								continue 'start;
-							}
-						}
-					}
-					count_monsters += 1;
-				}
-			}
-			if count_monsters > 0 { break 'outer; }
-			full = rotate(&full);
-		}
-		for row in full.iter_mut() {
-			row.reverse();
-		}
-	}
-	let all_hash: usize = full.iter().map(|row| row.iter().map(|cell| *cell as usize).sum::<usize>()).sum();
-	return (all_hash - count_monsters*15).to_string();
+
+
+	let full = build_full_map(&tiles, top_left);
+	let mut num_hash = 0;
+	for row in &full { for cell in row { num_hash += *cell as usize; } }
+	let count_monsters = find_monsters(full);
+	return (num_hash - count_monsters*15).to_string();
 }
 
 #[test]
