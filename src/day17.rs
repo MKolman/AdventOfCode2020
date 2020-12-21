@@ -9,9 +9,9 @@ fn parse_input(input: &str) -> Vec<Vec<bool>> {
 
 fn count_neighbours(x: usize, y: usize, z: usize, field: &[Vec<Vec<bool>>]) -> usize {
 	let mut result = 0;
-	for plane in field.iter().skip(z-1).take(3) {
-		for line in plane.iter().skip(y-1).take(3) {
-			for cell in line.iter().skip(x-1).take(3) {
+	for plane in field.iter().skip(z - 1).take(3) {
+		for line in plane.iter().skip(y - 1).take(3) {
+			for cell in line.iter().skip(x - 1).take(3) {
 				result += *cell as usize;
 			}
 		}
@@ -26,7 +26,7 @@ fn count_neighbours4(
 	field: &[Vec<Vec<Vec<bool>>>],
 ) -> usize {
 	let mut result = 0;
-	for space in field.iter().skip(w-1).take(3) {
+	for space in field.iter().skip(w - 1).take(3) {
 		result += count_neighbours(x, y, z, space);
 	}
 	return result;

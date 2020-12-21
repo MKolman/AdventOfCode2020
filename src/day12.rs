@@ -9,10 +9,7 @@ struct Complex {
 
 impl Complex {
 	pub fn new(real: i64, imag: i64) -> Complex {
-		Complex {
-			real,
-			imag,
-		}
+		Complex { real, imag }
 	}
 	pub fn rot(deg: i64) -> Complex {
 		match deg {
