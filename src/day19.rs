@@ -4,12 +4,12 @@ use wasm_bindgen::prelude::*;
 fn calc_rules<'a>(
 	i: usize,
 	mut rules_memo: &'a mut Vec<String>,
-	rules: &Vec<&str>,
+	rules: &[&str],
 ) -> &'a mut Vec<String> {
-	if rules_memo[i].len() != 0 {
+	if !rules_memo[i].is_empty() {
 		return rules_memo;
 	}
-	let sub: Vec<&str> = rules[i].split(":").collect::<Vec<&str>>()[1]
+	let sub: Vec<&str> = rules[i].split(':').collect::<Vec<&str>>()[1]
 		.split_whitespace()
 		.collect();
 	let mut result = "(".to_string();
@@ -31,7 +31,7 @@ pub fn part_one(input: String) -> String {
 	let parts: Vec<&str> = input.split("\n\n").collect();
 
 	let mut rules: Vec<&str> = parts[0].lines().collect();
-	rules.sort_by_key(|line| line.split(":").next().unwrap().parse::<usize>().unwrap());
+	rules.sort_by_key(|line| line.split(':').next().unwrap().parse::<usize>().unwrap());
 
 	let mut rules_memo = &mut vec![String::new(); rules.len()];
 	rules_memo = calc_rules(0, rules_memo, &rules);

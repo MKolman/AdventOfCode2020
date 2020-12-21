@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<usize> {
+fn parse_input(input: &str) -> Vec<usize> {
 	input
 		.lines()
 		.map(|line| {
@@ -23,7 +23,7 @@ pub fn part_one(input: String) -> String {
 #[wasm_bindgen(js_name = day05_part_two)]
 pub fn part_two(input: String) -> String {
 	let mut seats = parse_input(&input);
-	seats.sort();
+	seats.sort_unstable();
 	for (i, id) in seats.iter().enumerate() {
 		if i == 0 {
 			continue;

@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 
-fn solve(input: &Vec<char>, mut i: usize) -> (u64, usize) {
+fn solve(input: &[char], mut i: usize) -> (u64, usize) {
 	let mut result = 0_u64;
 	let mut op = '+';
 	while i < input.len() {
@@ -29,13 +29,13 @@ fn solve(input: &Vec<char>, mut i: usize) -> (u64, usize) {
 	return (result, i);
 }
 
-fn solve2(input: &Vec<char>, mut i: usize) -> (u64, usize) {
+fn solve2(input: &[char], mut i: usize) -> (u64, usize) {
 	let mut sums = vec![0];
 	let mut op = '+';
 	while i < input.len() {
 		let (val, di) = match input[i] {
 			'(' => solve2(input, i + 1),
-			')' => return (sums.iter().fold(1, |a, b| a * b), i + 1),
+			')' => return (sums.iter().product(), i + 1),
 			'+' | '*' => {
 				op = input[i];
 				i += 1;
@@ -56,14 +56,14 @@ fn solve2(input: &Vec<char>, mut i: usize) -> (u64, usize) {
 			sums.push(val);
 		}
 	}
-	return (sums.iter().fold(1, |a, b| a * b), i);
+	return (sums.iter().product(), i);
 }
 
 #[wasm_bindgen(js_name = day18_part_one)]
 pub fn part_one(input: String) -> String {
 	let mut result = 0;
 	for line in input.lines() {
-		result += solve(&line.chars().collect(), 0).0;
+		result += solve(&line.chars().collect::<Vec<_>>(), 0).0;
 	}
 	return result.to_string();
 }
@@ -72,7 +72,7 @@ pub fn part_one(input: String) -> String {
 pub fn part_two(input: String) -> String {
 	let mut result = 0;
 	for line in input.lines() {
-		let (val, _) = solve2(&line.chars().collect(), 0);
+		let (val, _) = solve2(&line.chars().collect::<Vec<_>>(), 0);
 		result += val;
 	}
 	return result.to_string();

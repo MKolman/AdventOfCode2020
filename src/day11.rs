@@ -1,8 +1,7 @@
 use core::cmp::max;
-use std::cmp::min;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<Vec<Option<bool>>> {
+fn parse_input(input: &str) -> Vec<Vec<Option<bool>>> {
 	input
 		.lines()
 		.map(|l| {
@@ -19,11 +18,11 @@ fn parse_input(input: &String) -> Vec<Vec<Option<bool>>> {
 		.collect()
 }
 
-fn count(row: usize, col: usize, seats: &Vec<Vec<Option<bool>>>) -> u8 {
+fn count(row: usize, col: usize, seats: &[Vec<Option<bool>>]) -> u8 {
 	let mut cnt = 0;
-	for r in max(row, 1) - 1..=min(row + 1, seats.len() - 1) {
-		for c in max(col, 1) - 1..=min(col + 1, seats[r].len() - 1) {
-			if (r != row || c != col) && seats[r][c] == Some(true) {
+	for (r, srow) in seats.iter().skip(max(row, 1) - 1).take(3).enumerate() {
+		for (c, seat) in srow.iter().skip(max(col, 1) - 1).take(3).enumerate() {
+			if (r != 1 || c != 1) && *seat == Some(true) {
 				cnt += 1;
 			}
 		}
@@ -31,7 +30,7 @@ fn count(row: usize, col: usize, seats: &Vec<Vec<Option<bool>>>) -> u8 {
 	return cnt;
 }
 
-fn find_neighbours(seats: &Vec<Vec<Option<bool>>>) -> Vec<Vec<Vec<(usize, usize)>>> {
+fn find_neighbours(seats: &[Vec<Option<bool>>]) -> Vec<Vec<Vec<(usize, usize)>>> {
 	let mut result = Vec::new();
 	for row in 0..seats.len() {
 		result.push(Vec::new());
@@ -61,7 +60,7 @@ fn find_neighbours(seats: &Vec<Vec<Option<bool>>>) -> Vec<Vec<Vec<(usize, usize)
 	}
 	return result;
 }
-fn count_long(seats: &Vec<Vec<Option<bool>>>, neighbours: &Vec<(usize, usize)>) -> u8 {
+fn count_long(seats: &[Vec<Option<bool>>], neighbours: &[(usize, usize)]) -> u8 {
 	let mut cnt = 0;
 	for (r, c) in neighbours {
 		if seats[*r][*c] == Some(true) {

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
-fn parse_mask(line: String) -> (u64, u64) {
+fn parse_mask(line: &str) -> (u64, u64) {
 	let (mut mask0, mut mask1) = (u64::MAX, 0);
 	for (i, c) in line[7..].chars().enumerate() {
 		match c {
@@ -19,7 +19,7 @@ pub fn part_one(input: String) -> String {
 	let mut mem: HashMap<&str, u64> = HashMap::new();
 	for line in input.lines() {
 		if line.contains("mask = ") {
-			mask = parse_mask(line.to_string());
+			mask = parse_mask(line);
 		} else {
 			let parts: Vec<&str> = line.split("] = ").collect();
 			let value: u64 = parts[1].parse().unwrap();
@@ -33,7 +33,7 @@ pub fn part_one(input: String) -> String {
 	return result.to_string();
 }
 
-fn apply_mask(addr: &String, mask: &String) -> Vec<String> {
+fn apply_mask(addr: &str, mask: &str) -> Vec<String> {
 	let mut result = vec![String::new()];
 	for (c, m) in addr.chars().zip(mask.chars()) {
 		let size = result.len();

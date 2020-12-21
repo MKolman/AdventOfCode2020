@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<Vec<bool>> {
+fn parse_input(input: &str) -> Vec<Vec<bool>> {
 	input
 		.lines()
 		.map(|s| s.chars().map(|c| c == '#').collect())
@@ -29,7 +29,7 @@ pub fn part_two(input: String) -> String {
 			result[4] += line[(i / 2) % line.len()] as i64;
 		}
 	}
-	return result.iter().fold(1, |total, r| total * r).to_string();
+	return result.iter().product::<i64>().to_string();
 }
 
 #[test]

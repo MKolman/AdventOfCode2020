@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::collections::VecDeque;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> HashMap<String, Vec<(u16, String)>> {
+fn parse_input(input: &str) -> HashMap<String, Vec<(u16, String)>> {
 	let mut result = HashMap::new();
 	for line in input.lines() {
 		let bags: Vec<&str> = line.splitn(2, " bags contain ").collect();
@@ -28,16 +28,14 @@ pub fn part_one(input: String) -> String {
 	let mut reverse: HashMap<String, Vec<String>> = HashMap::new();
 	for (outer, contents) in &graph {
 		for (_, inner) in contents {
-			if !reverse.contains_key(&inner.to_string()) {
-				reverse.insert(inner.to_string(), Vec::new());
-			};
+			reverse.entry(inner.to_string()).or_insert(Vec::new());
 			reverse.get_mut(inner).unwrap().push(outer.to_string());
 		}
 	}
 	let mut visited = HashSet::new();
 	let mut queue = VecDeque::new();
 	queue.push_back("shiny gold".to_string());
-	while queue.len() > 0 {
+	while !queue.is_empty() {
 		let color = queue.pop_front().unwrap().to_string();
 		visited.insert(color.clone());
 		if !reverse.contains_key(&color) {
@@ -56,7 +54,7 @@ pub fn part_one(input: String) -> String {
 pub fn part_two(input: String) -> String {
 	let graph = parse_input(&input);
 	fn inside(
-		color: &String,
+		color: &str,
 		graph: &HashMap<String, Vec<(u16, String)>>,
 		memo: &mut HashMap<String, u64>,
 	) -> u64 {

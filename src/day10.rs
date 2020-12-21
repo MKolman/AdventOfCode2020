@@ -3,7 +3,7 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen(js_name = day10_part_one)]
 pub fn part_one(input: String) -> String {
 	let mut num: Vec<usize> = input.lines().map(|l| l.parse().unwrap()).collect();
-	num.sort();
+	num.sort_unstable();
 	let mut prev = 0;
 	let mut cnt = [0, 0, 0];
 	for n in &num {
@@ -17,8 +17,8 @@ pub fn part_one(input: String) -> String {
 pub fn part_two(input: String) -> String {
 	let mut num: Vec<usize> = input.lines().map(|l| l.parse().unwrap()).collect();
 	num.push(0);
-	num.sort();
-	fn count(i: usize, num: &Vec<usize>, memo: &mut Vec<usize>) -> usize {
+	num.sort_unstable();
+	fn count(i: usize, num: &[usize], memo: &mut Vec<usize>) -> usize {
 		if i >= num.len() - 1 {
 			return 1;
 		}

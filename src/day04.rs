@@ -2,7 +2,7 @@ use regex::Regex;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<HashMap<&str, &str>> {
+fn parse_input(input: &str) -> Vec<HashMap<&str, &str>> {
 	input
 		.split("\n\n")
 		.map(|passport| {

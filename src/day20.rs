@@ -20,10 +20,10 @@ impl Tile {
 	fn new(id: usize, val: Vec<Vec<bool>>) -> Tile {
 		let borders = hash_borders(&val);
 		Tile {
-			id: id,
+			id,
 			size: val.len(),
-			val: val,
-			borders: borders,
+			val,
+			borders,
 			neighbours: [None; 4],
 		}
 	}
@@ -49,13 +49,13 @@ impl Tile {
 	fn no_border(&self) -> Vec<Vec<bool>> {
 		return self.val[1..=8]
 			.iter()
-			.map(|r| r[1..=8].iter().map(|c| *c).collect())
+			.map(|r| r[1..=8].iter().copied().collect())
 			.collect();
 	}
 }
 
-fn rotate(v: &Vec<Vec<bool>>) -> Vec<Vec<bool>> {
-	let mut result = v.clone();
+fn rotate(v: &[Vec<bool>]) -> Vec<Vec<bool>> {
+	let mut result = v.to_owned();
 	for (r, row) in v.iter().enumerate() {
 		for (c, cell) in row.iter().enumerate() {
 			result[c][v.len() - 1 - r] = *cell;
@@ -64,7 +64,7 @@ fn rotate(v: &Vec<Vec<bool>>) -> Vec<Vec<bool>> {
 	return result;
 }
 
-fn parse_input(input: &String) -> Vec<Tile> {
+fn parse_input(input: &str) -> Vec<Tile> {
 	let result = input
 		.trim()
 		.split("\n\n")
@@ -110,7 +110,7 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 	let mut visited = HashSet::new();
 	visited.insert(0);
 	let mut stack = vec![0];
-	while stack.len() > 0 {
+	while !stack.is_empty() {
 		let id = stack.pop().unwrap();
 		'side: for side in 0..4 {
 			if tiles[id].neighbours[side] != None {
@@ -145,7 +145,7 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 	return tiles;
 }
 
-fn hash_one_border(border: &Vec<bool>) -> BorderHash {
+fn hash_one_border(border: &[bool]) -> BorderHash {
 	let mut hash = 0;
 	for v in border {
 		hash = hash * 2 + *v as usize;
@@ -153,17 +153,17 @@ fn hash_one_border(border: &Vec<bool>) -> BorderHash {
 	return hash;
 }
 
-fn hash_borders(tile: &Vec<Vec<bool>>) -> [BorderHash; 4] {
+fn hash_borders(tile: &[Vec<bool>]) -> [BorderHash; 4] {
 	let (w, h) = (tile[0].len(), tile.len());
 	let mut result = [0; 4];
 	result[N] = hash_one_border(&tile[0]);
-	result[W] = hash_one_border(&tile.iter().map(|row| row[0]).collect());
-	result[E] = hash_one_border(&tile.iter().map(|row| row[w - 1]).collect());
+	result[W] = hash_one_border(&tile.iter().map(|row| row[0]).collect::<Vec<_>>());
+	result[E] = hash_one_border(&tile.iter().map(|row| row[w - 1]).collect::<Vec<_>>());
 	result[S] = hash_one_border(&tile[h - 1]);
 	return result;
 }
 
-fn build_full_map(tiles: &Vec<Tile>, top_left: usize) -> Vec<Vec<bool>> {
+fn build_full_map(tiles: &[Tile], top_left: usize) -> Vec<Vec<bool>> {
 	// Keep track of current tile and first tile in current row
 	let (mut cur, mut first) = (top_left, top_left);
 	let mut full = tiles[top_left].no_border();
