@@ -1,4 +1,4 @@
-use core::cmp::max;
+use core::cmp::{max, min};
 use wasm_bindgen::prelude::*;
 
 fn parse_input(input: &str) -> Vec<Vec<Option<bool>>> {
@@ -20,9 +20,10 @@ fn parse_input(input: &str) -> Vec<Vec<Option<bool>>> {
 
 fn count(row: usize, col: usize, seats: &[Vec<Option<bool>>]) -> u8 {
 	let mut cnt = 0;
-	for (r, srow) in seats.iter().skip(max(row, 1) - 1).take(3).enumerate() {
-		for (c, seat) in srow.iter().skip(max(col, 1) - 1).take(3).enumerate() {
-			if (r != 1 || c != 1) && *seat == Some(true) {
+	#[allow(clippy::needless_range_loop)]
+	for r in max(row, 1) - 1..=min(row + 1, seats.len() - 1) {
+		for c in max(col, 1) - 1..=min(col + 1, seats[r].len() - 1) {
+			if (r != row || c != col) && seats[r][c] == Some(true) {
 				cnt += 1;
 			}
 		}
