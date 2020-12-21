@@ -7,7 +7,7 @@ pub fn part_one(input: String) -> String {
 	let mut counter: HashMap<&str, usize> = HashMap::new();
 	for line in input.lines() {
 		let parts: Vec<_> = line.split(" (contains ").collect();
-		let ing: HashSet<_> = parts[0].split(" ").collect();
+		let ing: HashSet<_> = parts[0].split(' ').collect();
 		for i in &ing {
 			if let Some(c) = counter.get_mut(i) {
 				*c += 1;
@@ -40,7 +40,7 @@ pub fn part_two(input: String) -> String {
 	let mut alergens: HashMap<&str, HashSet<&str>> = HashMap::new();
 	for line in input.lines() {
 		let parts: Vec<_> = line.split(" (contains ").collect();
-		let ing: HashSet<_> = parts[0].split(" ").collect();
+		let ing: HashSet<_> = parts[0].split(' ').collect();
 		for alergen in parts[1][..parts[1].len() - 1].split(", ") {
 			if let Some(x) = alergens.get_mut(alergen) {
 				for i in x.clone().iter() {
@@ -57,7 +57,7 @@ pub fn part_two(input: String) -> String {
 	for a in alergens.keys() {
 		alergen_result.insert(*a, "");
 	}
-	while alergens.len() > 0 {
+	while !alergens.is_empty() {
 		for a in alergens.clone().keys() {
 			if alergens[a].len() == 1 {
 				let i = *alergens[a].iter().next().unwrap();

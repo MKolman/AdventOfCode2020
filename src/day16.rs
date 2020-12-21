@@ -2,7 +2,10 @@ use regex::Regex;
 use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> (Vec<(String, [u64; 4])>, Vec<Vec<u64>>) {
+type Rule = (String, [u64; 4]);
+type Ticket = Vec<u64>;
+
+fn parse_input(input: &str) -> (Vec<Rule>, Vec<Ticket>) {
 	let groups: Vec<&str> = input.splitn(2, "\n\n").collect();
 	let mut rules = Vec::new();
 	let rule_re = Regex::new("([a-z ]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)").unwrap();
@@ -23,7 +26,7 @@ fn parse_input(input: &String) -> (Vec<(String, [u64; 4])>, Vec<Vec<u64>>) {
 	let mut tickets = Vec::new();
 	for ticket in groups[1].lines() {
 		if ticket_re.is_match(ticket) {
-			tickets.push(ticket.split(",").map(|s| s.parse().unwrap()).collect());
+			tickets.push(ticket.split(',').map(|s| s.parse().unwrap()).collect());
 		}
 	}
 	return (rules, tickets);
@@ -89,9 +92,9 @@ pub fn part_two(input: String) -> String {
 		for i in 0..nrule {
 			if rule2col[i].len() == 1 {
 				let col = *rule2col[i].iter().next().unwrap();
-				for j in 0..nrule {
-					if i != j && rule2col[j].contains(&col) {
-						rule2col[j].remove(&col);
+				for (j, cols) in rule2col.iter_mut().enumerate() {
+					if i != j && cols.contains(&col) {
+						cols.remove(&col);
 						change = true;
 					}
 				}

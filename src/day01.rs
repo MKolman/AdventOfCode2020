@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<i64> {
+fn parse_input(input: &str) -> Vec<i64> {
 	input.lines().map(|v| v.parse().unwrap()).collect()
 }
 

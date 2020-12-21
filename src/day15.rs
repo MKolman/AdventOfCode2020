@@ -1,11 +1,11 @@
 use wasm_bindgen::prelude::*;
 
-fn solve(input: &String, length: usize) -> String {
+fn solve(input: &str, length: usize) -> String {
 	let unseen = length + 1;
 	let mut seen = vec![unseen; length];
-	let start_len = input.matches(",").count();
+	let start_len = input.matches(',').count();
 	let mut prev = 0;
-	for (i, n) in input.split(",").enumerate() {
+	for (i, n) in input.split(',').enumerate() {
 		let p = n.parse().unwrap();
 		if i == start_len {
 			prev = p;

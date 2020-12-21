@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 
-fn parse_input(input: &String) -> Vec<(i64, i64, char, String)> {
+fn parse_input(input: &str) -> Vec<(i64, i64, char, String)> {
 	input
 		.lines()
 		.map(|s| {
@@ -9,7 +9,7 @@ fn parse_input(input: &String) -> Vec<(i64, i64, char, String)> {
 			return (
 				limits[0].parse().unwrap(),
 				limits[1].parse().unwrap(),
-				parts[1].chars().nth(0).unwrap(),
+				parts[1].chars().next().unwrap(),
 				parts[2].to_string(),
 			);
 		})

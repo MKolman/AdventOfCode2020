@@ -9,10 +9,7 @@ struct Complex {
 
 impl Complex {
 	pub fn new(real: i64, imag: i64) -> Complex {
-		Complex {
-			real: real,
-			imag: imag,
-		}
+		Complex { real, imag }
 	}
 	pub fn rot(deg: i64) -> Complex {
 		match deg {
@@ -53,7 +50,7 @@ pub fn part_one(input: String) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut dir = Complex::new(0, 1);
 	for l in input.lines() {
-		let c = l.chars().nth(0).unwrap();
+		let c = l.chars().next().unwrap();
 		let n: i64 = l[1..].parse().unwrap();
 		match c {
 			'F' => pos += dir * n,
@@ -74,7 +71,7 @@ pub fn part_two(input: String) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut way = Complex::new(1, 10);
 	for l in input.lines() {
-		let c = l.chars().nth(0).unwrap();
+		let c = l.chars().next().unwrap();
 		let n: i64 = l[1..].parse().unwrap();
 		match c {
 			'F' => pos += way * n,

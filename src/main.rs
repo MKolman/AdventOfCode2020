@@ -1,3 +1,5 @@
+#![allow(clippy::needless_return)]
+
 use adventofcode2020::*;
 use std::time::Instant;
 

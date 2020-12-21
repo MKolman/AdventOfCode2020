@@ -6,7 +6,7 @@ pub fn part_one(input: String) -> String {
 	let code: Vec<(&str, i64)> = input
 		.lines()
 		.map(|l| {
-			let pieces: Vec<&str> = l.splitn(2, " ").collect();
+			let pieces: Vec<&str> = l.splitn(2, ' ').collect();
 			(pieces[0], pieces[1].parse().unwrap())
 		})
 		.collect();
@@ -32,7 +32,7 @@ pub fn part_two(input: String) -> String {
 	let mut code: Vec<(&str, i64)> = input
 		.lines()
 		.map(|l| {
-			let pieces: Vec<&str> = l.splitn(2, " ").collect();
+			let pieces: Vec<&str> = l.splitn(2, ' ').collect();
 			(pieces[0], pieces[1].parse().unwrap())
 		})
 		.collect();
