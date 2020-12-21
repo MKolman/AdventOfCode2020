@@ -1,6 +1,5 @@
-use std::time::Instant;
 use adventofcode2020::*;
-
+use std::time::Instant;
 
 fn main() {
 	let all = [
@@ -32,8 +31,8 @@ fn main() {
 	];
 	let start = Instant::now();
 	for (day, [one, two]) in all.iter().enumerate() {
-		let input = common::get_input(day+1);
-		println!("Day {}:", day+1);
+		let input = common::get_input(day + 1);
+		println!("Day {}:", day + 1);
 		let start_one = Instant::now();
 		let sol_one = one(input.clone());
 		let dur_one = start_one.elapsed();

@@ -5,9 +5,9 @@ fn parse_mask(line: String) -> (u64, u64) {
 	let (mut mask0, mut mask1) = (u64::MAX, 0);
 	for (i, c) in line[7..].chars().enumerate() {
 		match c {
-			'0' => mask0 -= 1 << (35-i),
-			'1' => mask1 += 1 << (35-i),
-			_ => {},
+			'0' => mask0 -= 1 << (35 - i),
+			'1' => mask1 += 1 << (35 - i),
+			_ => {}
 		}
 	}
 	return (mask0, mask1);
@@ -23,7 +23,7 @@ pub fn part_one(input: String) -> String {
 		} else {
 			let parts: Vec<&str> = line.split("] = ").collect();
 			let value: u64 = parts[1].parse().unwrap();
-			mem.insert(parts[0], (value&mask.0)|mask.1);
+			mem.insert(parts[0], (value & mask.0) | mask.1);
 		}
 	}
 	let mut result = 0;
@@ -34,7 +34,7 @@ pub fn part_one(input: String) -> String {
 }
 
 fn apply_mask(addr: &String, mask: &String) -> Vec<String> {
-	let mut result = vec![String::new()]; 
+	let mut result = vec![String::new()];
 	for (c, m) in addr.chars().zip(mask.chars()) {
 		let size = result.len();
 		for i in 0..size {
@@ -44,7 +44,7 @@ fn apply_mask(addr: &String, mask: &String) -> Vec<String> {
 				'X' => {
 					result.push(format!("{}0", result[i]));
 					result[i].push('1');
-				},
+				}
 				x => panic!(format!("Invalid character {}", x)),
 			}
 		}
@@ -60,7 +60,10 @@ pub fn part_two(input: String) -> String {
 		if line.contains("mask = ") {
 			mask = line[7..].to_string();
 		} else {
-			let parts: Vec<u64> = line[4..].split("] = ").map(|s| s.parse().unwrap()).collect();
+			let parts: Vec<u64> = line[4..]
+				.split("] = ")
+				.map(|s| s.parse().unwrap())
+				.collect();
 			for addr in apply_mask(&format!("{:036b}", parts[0]), &mask) {
 				mem.insert(addr, parts[1]);
 			}

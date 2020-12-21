@@ -1,6 +1,6 @@
-use std::collections::VecDeque;
-use std::collections::HashSet;
 use std::collections::HashMap;
+use std::collections::HashSet;
+use std::collections::VecDeque;
 use wasm_bindgen::prelude::*;
 
 fn parse_input(input: &String) -> HashMap<String, Vec<(u16, String)>> {
@@ -10,8 +10,13 @@ fn parse_input(input: &String) -> HashMap<String, Vec<(u16, String)>> {
 		result.insert(bags[0].to_string(), Vec::new());
 		for inside in bags[1].split(',') {
 			let words: Vec<&str> = inside.trim().split_whitespace().collect();
-			if words[0] == "no" { continue; }
-			result.get_mut(&bags[0].to_string()).unwrap().push((words[0].parse().unwrap(), words[1].to_owned()+" "+words[2]));
+			if words[0] == "no" {
+				continue;
+			}
+			result.get_mut(&bags[0].to_string()).unwrap().push((
+				words[0].parse().unwrap(),
+				words[1].to_owned() + " " + words[2],
+			));
 		}
 	}
 	return result;
@@ -23,7 +28,9 @@ pub fn part_one(input: String) -> String {
 	let mut reverse: HashMap<String, Vec<String>> = HashMap::new();
 	for (outer, contents) in &graph {
 		for (_, inner) in contents {
-			if !reverse.contains_key(&inner.to_string()) { reverse.insert(inner.to_string(), Vec::new()); };
+			if !reverse.contains_key(&inner.to_string()) {
+				reverse.insert(inner.to_string(), Vec::new());
+			};
 			reverse.get_mut(inner).unwrap().push(outer.to_string());
 		}
 	}
@@ -33,24 +40,31 @@ pub fn part_one(input: String) -> String {
 	while queue.len() > 0 {
 		let color = queue.pop_front().unwrap().to_string();
 		visited.insert(color.clone());
-		if !reverse.contains_key(&color) { continue; }
+		if !reverse.contains_key(&color) {
+			continue;
+		}
 		for next in &reverse[&color] {
 			if !visited.contains(&next.to_string()) {
 				queue.push_back(next.to_string());
 			}
 		}
 	}
-	return (visited.len()-1).to_string();
+	return (visited.len() - 1).to_string();
 }
 
 #[wasm_bindgen(js_name = day07_part_two)]
 pub fn part_two(input: String) -> String {
 	let graph = parse_input(&input);
-	fn inside(color: &String, graph: &HashMap<String, Vec<(u16, String)>>, memo: &mut HashMap<String, u64>) -> u64 {
+	fn inside(
+		color: &String,
+		graph: &HashMap<String, Vec<(u16, String)>>,
+		memo: &mut HashMap<String, u64>,
+	) -> u64 {
 		if !memo.contains_key(color) {
-			let val = graph[color].iter().map(|(num, clr)| {
-				(*num as u64)+(*num as u64)*inside(clr, graph, memo)
-			}).sum();
+			let val = graph[color]
+				.iter()
+				.map(|(num, clr)| (*num as u64) + (*num as u64) * inside(clr, graph, memo))
+				.sum();
 			memo.insert(color.to_string(), val);
 		}
 		return memo[color];

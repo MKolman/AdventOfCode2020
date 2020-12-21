@@ -1,11 +1,17 @@
 use regex::Regex;
 use wasm_bindgen::prelude::*;
 
-fn calc_rules<'a>(i: usize, mut rules_memo: &'a mut Vec<String>, rules: &Vec<&str>) -> &'a mut Vec<String> {
+fn calc_rules<'a>(
+	i: usize,
+	mut rules_memo: &'a mut Vec<String>,
+	rules: &Vec<&str>,
+) -> &'a mut Vec<String> {
 	if rules_memo[i].len() != 0 {
 		return rules_memo;
 	}
-	let sub: Vec<&str> = rules[i].split(":").collect::<Vec<&str>>()[1].split_whitespace().collect();
+	let sub: Vec<&str> = rules[i].split(":").collect::<Vec<&str>>()[1]
+		.split_whitespace()
+		.collect();
 	let mut result = "(".to_string();
 	for part in sub {
 		if let Ok(n) = part.parse::<usize>() {

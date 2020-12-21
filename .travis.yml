@@ -9,6 +9,7 @@ rust:
 
 install:
   - cargo install wasm-pack
+  - rustup component add rustfmt
 
 jobs:
   allow_failures:
@@ -18,6 +19,7 @@ script:
   - cargo build --verbose --all
   - cargo test --verbose --all
   - wasm-pack build --target web --release --out-dir pkg && rm pkg/.gitignore
+  - cargo fmt -- --check
 
 deploy:
   provider: pages
