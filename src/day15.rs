@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 fn solve(input: &String, length: usize) -> String {
-	let unseen = length+1;
+	let unseen = length + 1;
 	let mut seen = vec![unseen; length];
 	let start_len = input.matches(",").count();
 	let mut prev = 0;
@@ -13,7 +13,7 @@ fn solve(input: &String, length: usize) -> String {
 			seen[p] = i;
 		}
 	}
-	for i in start_len..length-1 {
+	for i in start_len..length - 1 {
 		if seen[prev] != unseen {
 			let next = i - seen[prev];
 			seen[prev] = i;

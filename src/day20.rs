@@ -13,18 +13,18 @@ struct Tile {
 	size: usize,
 	val: Vec<Vec<bool>>,
 	borders: [BorderHash; 4],
-	neighbours: [Option<usize>; 4]
+	neighbours: [Option<usize>; 4],
 }
 
 impl Tile {
 	fn new(id: usize, val: Vec<Vec<bool>>) -> Tile {
 		let borders = hash_borders(&val);
-		Tile{
+		Tile {
 			id: id,
 			size: val.len(),
 			val: val,
 			borders: borders,
-			neighbours: [None; 4]
+			neighbours: [None; 4],
 		}
 	}
 
@@ -47,9 +47,10 @@ impl Tile {
 	}
 
 	fn no_border(&self) -> Vec<Vec<bool>> {
-		return self.val[1..=8].iter().map(
-			|r| r[1..=8].iter().map(|c| *c).collect()
-		).collect();
+		return self.val[1..=8]
+			.iter()
+			.map(|r| r[1..=8].iter().map(|c| *c).collect())
+			.collect();
 	}
 }
 
@@ -64,13 +65,19 @@ fn rotate(v: &Vec<Vec<bool>>) -> Vec<Vec<bool>> {
 }
 
 fn parse_input(input: &String) -> Vec<Tile> {
-	let result = input.trim().split("\n\n").map(|tile| {
-		let mut lines = tile.lines();
-		let title = lines.next().unwrap();
-		let id = title[5..title.len()-1].parse().unwrap();
-		let map = lines.map(|line| line.chars().map(|c| c == '#').collect()).collect();
-		return Tile::new(id, map);
-	}).collect();
+	let result = input
+		.trim()
+		.split("\n\n")
+		.map(|tile| {
+			let mut lines = tile.lines();
+			let title = lines.next().unwrap();
+			let id = title[5..title.len() - 1].parse().unwrap();
+			let map = lines
+				.map(|line| line.chars().map(|c| c == '#').collect())
+				.collect();
+			return Tile::new(id, map);
+		})
+		.collect();
 	return find_neighbours(result);
 }
 
@@ -92,7 +99,9 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 			let symetric_hash = border + reverse_border_hash(*border);
 			match border_to_tile.get_mut(&symetric_hash) {
 				Some(val) => val.push(i),
-				None => {border_to_tile.insert(symetric_hash, vec![i]);},
+				None => {
+					border_to_tile.insert(symetric_hash, vec![i]);
+				}
 			};
 		}
 	}
@@ -104,13 +113,17 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 	while stack.len() > 0 {
 		let id = stack.pop().unwrap();
 		'side: for side in 0..4 {
-			if tiles[id].neighbours[side] != None { continue; }
+			if tiles[id].neighbours[side] != None {
+				continue;
+			}
 			let border = tiles[id].borders[side];
 			let reverse = reverse_border_hash(border);
 			let symetric_hash = border + reverse;
 			let opposite = (side + 2) % 4;
 			for i in border_to_tile.get(&symetric_hash).unwrap() {
-				if *i == id { continue; }
+				if *i == id {
+					continue;
+				}
 				for _ in 0..4 {
 					if tiles[*i].borders[opposite] == reverse {
 						tiles[*i].flip();
@@ -135,7 +148,7 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 fn hash_one_border(border: &Vec<bool>) -> BorderHash {
 	let mut hash = 0;
 	for v in border {
-		hash = hash*2 + *v as usize;
+		hash = hash * 2 + *v as usize;
 	}
 	return hash;
 }
@@ -145,8 +158,8 @@ fn hash_borders(tile: &Vec<Vec<bool>>) -> [BorderHash; 4] {
 	let mut result = [0; 4];
 	result[N] = hash_one_border(&tile[0]);
 	result[W] = hash_one_border(&tile.iter().map(|row| row[0]).collect());
-	result[E] = hash_one_border(&tile.iter().map(|row| row[w-1]).collect());
-	result[S] = hash_one_border(&tile[h-1]);
+	result[E] = hash_one_border(&tile.iter().map(|row| row[w - 1]).collect());
+	result[S] = hash_one_border(&tile[h - 1]);
 	return result;
 }
 
@@ -158,9 +171,9 @@ fn build_full_map(tiles: &Vec<Tile>, top_left: usize) -> Vec<Vec<bool>> {
 	loop {
 		if let Some(n) = tiles[cur].neighbours[E] {
 			cur = n;
-			let row = full.len()-height;
+			let row = full.len() - height;
 			for (i, r) in tiles[n].no_border().iter_mut().enumerate() {
-				full[row+i].append(r);
+				full[row + i].append(r);
 			}
 		} else if let Some(n) = tiles[first].neighbours[S] {
 			first = n;
@@ -182,11 +195,11 @@ fn find_monsters(mut full: Vec<Vec<bool>>) -> usize {
 	];
 	for _ in 0..2 {
 		for _ in 0..4 {
-			for row in 0..full.len()-monster.len() {
-				'start: for col in 0..full[0].len()-monster[0].len() {
+			for row in 0..full.len() - monster.len() {
+				'start: for col in 0..full[0].len() - monster[0].len() {
 					for r in 0..monster.len() {
 						for c in 0..monster[0].len() {
-							if monster[r][c] == '#' && !full[row+r][col+c] {
+							if monster[r][c] == '#' && !full[row + r][col + c] {
 								continue 'start;
 							}
 						}
@@ -194,7 +207,9 @@ fn find_monsters(mut full: Vec<Vec<bool>>) -> usize {
 					count_monsters += 1;
 				}
 			}
-			if count_monsters > 0 { return count_monsters; }
+			if count_monsters > 0 {
+				return count_monsters;
+			}
 			full = rotate(&full);
 		}
 		for row in full.iter_mut() {
@@ -209,7 +224,13 @@ pub fn part_one(input: String) -> String {
 	let tiles = parse_input(&input);
 	let mut result = 1;
 	for tile in tiles {
-		if tile.neighbours.iter().map(|n| (*n == None) as usize).sum::<usize>() == 2 {
+		if tile
+			.neighbours
+			.iter()
+			.map(|n| (*n == None) as usize)
+			.sum::<usize>()
+			== 2
+		{
 			result *= tile.id;
 		}
 	}
@@ -229,9 +250,13 @@ pub fn part_two(input: String) -> String {
 
 	let full = build_full_map(&tiles, top_left);
 	let mut num_hash = 0;
-	for row in &full { for cell in row { num_hash += *cell as usize; } }
+	for row in &full {
+		for cell in row {
+			num_hash += *cell as usize;
+		}
+	}
 	let num_monsters = find_monsters(full);
-	return (num_hash - num_monsters*15).to_string();
+	return (num_hash - num_monsters * 15).to_string();
 }
 
 #[test]

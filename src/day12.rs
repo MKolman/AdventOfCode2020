@@ -1,51 +1,51 @@
-use std::ops::{Mul, AddAssign, MulAssign};
+use std::ops::{AddAssign, Mul, MulAssign};
 use wasm_bindgen::prelude::*;
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug)]
 struct Complex {
-    real: i64,
-    imag: i64,
+	real: i64,
+	imag: i64,
 }
 
 impl Complex {
-     pub fn new(real: i64, imag: i64) -> Complex {
-        Complex {
-            real: real,
-            imag: imag,
-        }
-    }
-    pub fn rot(deg: i64) -> Complex {
-    	match deg {
+	pub fn new(real: i64, imag: i64) -> Complex {
+		Complex {
+			real: real,
+			imag: imag,
+		}
+	}
+	pub fn rot(deg: i64) -> Complex {
+		match deg {
 			90 | -270 => Complex::new(0, 1),
 			-90 | 270 => Complex::new(0, -1),
 			180 | -180 => Complex::new(-1, 0),
 			0 | 360 => Complex::new(1, 0),
 			_ => panic!(format!("Can't rotate like that: {}", deg)),
 		}
-    }
+	}
 }
 impl AddAssign<Complex> for Complex {
-    fn add_assign(&mut self, another: Complex) {
-    	self.real += another.real;
-    	self.imag += another.imag;
-    }
+	fn add_assign(&mut self, another: Complex) {
+		self.real += another.real;
+		self.imag += another.imag;
+	}
 }
 impl MulAssign<Complex> for Complex {
-    fn mul_assign(&mut self, another: Complex) {
-        let real = (self.real * another.real) - (self.imag * another.imag);
-        self.imag = (self.real * another.imag) + (self.imag * another.real);
-        self.real = real;
-    }
+	fn mul_assign(&mut self, another: Complex) {
+		let real = (self.real * another.real) - (self.imag * another.imag);
+		self.imag = (self.real * another.imag) + (self.imag * another.real);
+		self.real = real;
+	}
 }
 impl Mul<i64> for Complex {
-    type Output = Complex;
+	type Output = Complex;
 
-    fn mul(self, another: i64) -> Complex {
-        Complex {
-            real: self.real*another,
-            imag: self.imag*another,
-        }
-    }
+	fn mul(self, another: i64) -> Complex {
+		Complex {
+			real: self.real * another,
+			imag: self.imag * another,
+		}
+	}
 }
 
 #[wasm_bindgen(js_name = day12_part_one)]
@@ -65,7 +65,6 @@ pub fn part_one(input: String) -> String {
 			'W' => pos += Complex::new(0, -n),
 			_ => panic!("Invalid instruction"),
 		}
-
 	}
 	return (pos.real.abs() + pos.imag.abs()).to_string();
 }
@@ -87,7 +86,6 @@ pub fn part_two(input: String) -> String {
 			'W' => way += Complex::new(0, -n),
 			_ => panic!("Invalid instruction"),
 		}
-
 	}
 	return (pos.real.abs() + pos.imag.abs()).to_string();
 }

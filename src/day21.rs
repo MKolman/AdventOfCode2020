@@ -15,7 +15,7 @@ pub fn part_one(input: String) -> String {
 				counter.insert(i, 1);
 			}
 		}
-		for alergen in parts[1][..parts[1].len()-1].split(", ") {
+		for alergen in parts[1][..parts[1].len() - 1].split(", ") {
 			if let Some(x) = alergens.get_mut(alergen) {
 				for i in x.clone().iter() {
 					if !ing.contains(i) {
@@ -41,7 +41,7 @@ pub fn part_two(input: String) -> String {
 	for line in input.lines() {
 		let parts: Vec<_> = line.split(" (contains ").collect();
 		let ing: HashSet<_> = parts[0].split(" ").collect();
-		for alergen in parts[1][..parts[1].len()-1].split(", ") {
+		for alergen in parts[1][..parts[1].len() - 1].split(", ") {
 			if let Some(x) = alergens.get_mut(alergen) {
 				for i in x.clone().iter() {
 					if !ing.contains(i) {
@@ -78,5 +78,8 @@ pub fn part_two(input: String) -> String {
 fn test() {
 	let input = crate::common::get_input(21);
 	assert_eq!(part_one(input.clone()), "1815".to_string());
-	assert_eq!(part_two(input.clone()), "kllgt,jrnqx,ljvx,zxstb,gnbxs,mhtc,hfdxb,hbfnkq".to_string());
+	assert_eq!(
+		part_two(input.clone()),
+		"kllgt,jrnqx,ljvx,zxstb,gnbxs,mhtc,hfdxb,hbfnkq".to_string()
+	);
 }

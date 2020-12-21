@@ -5,11 +5,18 @@ fn solve(input: &Vec<char>, mut i: usize) -> (u64, usize) {
 	let mut op = '+';
 	while i < input.len() {
 		let (val, di) = match input[i] {
-			'(' => solve(input, i+1),
-			')' => return (result, i+1),
-			'+'|'*' => { op = input[i]; i += 1; continue; },
-			' ' => { i += 1; continue; },
-			n if n >= '0' && n <= '9' => (n.to_digit(10).unwrap() as u64, i+1),
+			'(' => solve(input, i + 1),
+			')' => return (result, i + 1),
+			'+' | '*' => {
+				op = input[i];
+				i += 1;
+				continue;
+			}
+			' ' => {
+				i += 1;
+				continue;
+			}
+			n if n >= '0' && n <= '9' => (n.to_digit(10).unwrap() as u64, i + 1),
 			c => panic!(format!("{} is not a valid character", c)),
 		};
 		i = di;
@@ -27,22 +34,29 @@ fn solve2(input: &Vec<char>, mut i: usize) -> (u64, usize) {
 	let mut op = '+';
 	while i < input.len() {
 		let (val, di) = match input[i] {
-			'(' => solve2(input, i+1),
-			')' => return (sums.iter().fold(1, |a, b| a*b), i+1),
-			'+'|'*' => { op = input[i]; i += 1; continue; },
-			' ' => { i += 1; continue; },
-			n if n >= '0' && n <= '9' => (n.to_digit(10).unwrap() as u64, i+1),
+			'(' => solve2(input, i + 1),
+			')' => return (sums.iter().fold(1, |a, b| a * b), i + 1),
+			'+' | '*' => {
+				op = input[i];
+				i += 1;
+				continue;
+			}
+			' ' => {
+				i += 1;
+				continue;
+			}
+			n if n >= '0' && n <= '9' => (n.to_digit(10).unwrap() as u64, i + 1),
 			c => panic!(format!("{} is not a valid character", c)),
 		};
 		i = di;
 		if op == '+' {
-			let n = sums.len()-1;
+			let n = sums.len() - 1;
 			sums[n] += val;
 		} else {
 			sums.push(val);
 		}
 	}
-	return (sums.iter().fold(1, |a, b| a*b), i);
+	return (sums.iter().fold(1, |a, b| a * b), i);
 }
 
 #[wasm_bindgen(js_name = day18_part_one)]

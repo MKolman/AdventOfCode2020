@@ -1,22 +1,28 @@
-use std::cmp::min;
 use core::cmp::max;
+use std::cmp::min;
 use wasm_bindgen::prelude::*;
 
 fn parse_input(input: &String) -> Vec<Vec<Option<bool>>> {
-	input.lines().map(|l| l.to_string().trim().chars().map(|c| {
-		match c {
-			'.' => None,
-			'L' => Some(false),
-			_ => panic!("Invalid input"),
-		}
-	}).collect()
-	).collect()
+	input
+		.lines()
+		.map(|l| {
+			l.to_string()
+				.trim()
+				.chars()
+				.map(|c| match c {
+					'.' => None,
+					'L' => Some(false),
+					_ => panic!("Invalid input"),
+				})
+				.collect()
+		})
+		.collect()
 }
 
 fn count(row: usize, col: usize, seats: &Vec<Vec<Option<bool>>>) -> u8 {
 	let mut cnt = 0;
-	for r in max(row, 1)-1..=min(row+1, seats.len()-1) {
-		for c in max(col, 1)-1..=min(col+1, seats[r].len()-1) {
+	for r in max(row, 1) - 1..=min(row + 1, seats.len() - 1) {
+		for c in max(col, 1) - 1..=min(col + 1, seats[r].len() - 1) {
 			if (r != row || c != col) && seats[r][c] == Some(true) {
 				cnt += 1;
 			}
@@ -33,12 +39,15 @@ fn find_neighbours(seats: &Vec<Vec<Option<bool>>>) -> Vec<Vec<Vec<(usize, usize)
 			result[row].push(Vec::new());
 			for dr in -1..=1 {
 				for dc in -1..=1 {
-					if dr == 0 && dc == 0 { continue; }
+					if dr == 0 && dc == 0 {
+						continue;
+					}
 					let mut i = 0;
 					loop {
 						i += 1;
 						let (r, c) = (row as i64 + i * dr, col as i64 + i * dc);
-						if r < 0 || c < 0 || r >= seats.len() as i64 || c >= seats[row].len() as i64 {
+						if r < 0 || c < 0 || r >= seats.len() as i64 || c >= seats[row].len() as i64
+						{
 							break;
 						}
 						if seats[r as usize][c as usize] != None {
@@ -48,7 +57,6 @@ fn find_neighbours(seats: &Vec<Vec<Option<bool>>>) -> Vec<Vec<Vec<(usize, usize)
 					}
 				}
 			}
-
 		}
 	}
 	return result;
@@ -72,15 +80,23 @@ pub fn part_one(input: String) -> String {
 		for r in 0..seats.len() {
 			for c in 0..seats[r].len() {
 				step[r][c] = match (seats[r][c], count(r, c, &seats)) {
-					(Some(false), 0) => { total_count += 1; Some(true) },
-					(Some(true), n) if n >= 4 => {total_count -= 1; Some(false) },
+					(Some(false), 0) => {
+						total_count += 1;
+						Some(true)
+					}
+					(Some(true), n) if n >= 4 => {
+						total_count -= 1;
+						Some(false)
+					}
 					(s, _) => s,
 				};
 			}
 		}
-		if step == seats { break; }
+		if step == seats {
+			break;
+		}
 		seats = step;
-	};
+	}
 	return total_count.to_string();
 }
 
@@ -94,15 +110,23 @@ pub fn part_two(input: String) -> String {
 		for r in 0..seats.len() {
 			for c in 0..seats[r].len() {
 				step[r][c] = match (seats[r][c], count_long(&seats, &neighbours[r][c])) {
-					(Some(false), 0) => { total_count += 1; Some(true) },
-					(Some(true), n) if n >= 5 => { total_count -= 1; Some(false) },
+					(Some(false), 0) => {
+						total_count += 1;
+						Some(true)
+					}
+					(Some(true), n) if n >= 5 => {
+						total_count -= 1;
+						Some(false)
+					}
 					(s, _) => s,
 				};
 			}
 		}
-		if step == seats { break; }
+		if step == seats {
+			break;
+		}
 		seats = step;
-	};
+	}
 	return total_count.to_string();
 }
 

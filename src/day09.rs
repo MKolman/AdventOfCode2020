@@ -5,15 +5,17 @@ pub fn part_one(input: String) -> String {
 	let nums: Vec<i64> = input.lines().map(|l| l.parse().unwrap()).collect();
 	for i in 25..nums.len() {
 		let mut valid = false;
-		'outer: for j in i-25..i {
-			for k in j+1..i {
+		'outer: for j in i - 25..i {
+			for k in j + 1..i {
 				if nums[j] + nums[k] == nums[i] {
 					valid = true;
 					break 'outer;
 				}
 			}
 		}
-		if !valid { return nums[i].to_string(); }
+		if !valid {
+			return nums[i].to_string();
+		}
 	}
 	return "0".to_string();
 }
@@ -32,7 +34,8 @@ pub fn part_two(input: String) -> String {
 			start += 1;
 		}
 	}
-	return (nums[start..end].iter().min().unwrap() + nums[start..end].iter().max().unwrap()).to_string();
+	return (nums[start..end].iter().min().unwrap() + nums[start..end].iter().max().unwrap())
+		.to_string();
 }
 
 #[test]

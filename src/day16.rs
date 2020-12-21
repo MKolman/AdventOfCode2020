@@ -1,6 +1,5 @@
-
-use std::collections::HashSet;
 use regex::Regex;
+use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
 fn parse_input(input: &String) -> (Vec<(String, [u64; 4])>, Vec<Vec<u64>>) {
@@ -9,12 +8,15 @@ fn parse_input(input: &String) -> (Vec<(String, [u64; 4])>, Vec<Vec<u64>>) {
 	let rule_re = Regex::new("([a-z ]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)").unwrap();
 	for rule in rule_re.captures_iter(groups[0]) {
 		// println!("{:?}", rule);
-		rules.push((rule[1].to_string(), [
-			rule[2].parse().unwrap(),
-			rule[3].parse().unwrap(),
-			rule[4].parse().unwrap(),
-			rule[5].parse().unwrap(),
-		]));
+		rules.push((
+			rule[1].to_string(),
+			[
+				rule[2].parse().unwrap(),
+				rule[3].parse().unwrap(),
+				rule[4].parse().unwrap(),
+				rule[5].parse().unwrap(),
+			],
+		));
 	}
 
 	let ticket_re = Regex::new("([0-9]+,)+").unwrap();
@@ -71,7 +73,9 @@ pub fn part_two(input: String) -> String {
 	for (i, (_, [lo, hi, lo2, hi2])) in rules.iter().enumerate() {
 		'cols: for column in 0..size {
 			for ticket in &valid_tickets {
-				if !(*lo <= ticket[column] && ticket[column] <= *hi || *lo2 <= ticket[column] && ticket[column] <= *hi2) {
+				if !(*lo <= ticket[column] && ticket[column] <= *hi
+					|| *lo2 <= ticket[column] && ticket[column] <= *hi2)
+				{
 					rule2col[i].remove(&column);
 					continue 'cols;
 				}

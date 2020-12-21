@@ -1,10 +1,8 @@
-use wasm_bindgen::prelude::*;
 use std::collections::HashSet;
+use wasm_bindgen::prelude::*;
 
 fn parse_input(input: &String) -> Vec<i64> {
-	input.lines()
-		.map(|v| v.parse().unwrap())
-		.collect()
+	input.lines().map(|v| v.parse().unwrap()).collect()
 }
 
 #[wasm_bindgen(js_name = day01_part_one)]
@@ -13,22 +11,21 @@ pub fn part_one(input: String) -> String {
 	let vec = parse_input(&input);
 	for n in vec {
 		if set.contains(&(2020 - n)) {
-			return (n * (2020-n)).to_string();
+			return (n * (2020 - n)).to_string();
 		}
 		set.insert(n);
 	}
 	return "0".to_string();
 }
 
-
 #[wasm_bindgen(js_name = day01_part_two)]
 pub fn part_two(input: String) -> String {
 	let mut set = HashSet::new();
 	let vec = parse_input(&input);
 	for (i, n) in vec.iter().enumerate() {
-		for m in &vec[i+1..vec.len()] {
+		for m in &vec[i + 1..vec.len()] {
 			if set.contains(&(2020 - n - m)) {
-				return (n * m * (2020-n-m)).to_string();
+				return (n * m * (2020 - n - m)).to_string();
 			}
 		}
 		set.insert(n);

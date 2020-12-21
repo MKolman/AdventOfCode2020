@@ -9,7 +9,7 @@ pub fn part_one(input: String) -> String {
 		if let Ok(num) = bus.parse::<i64>() {
 			let wait = num - (time % num);
 			if wait < best.0 {
-				best = (wait, wait*num);
+				best = (wait, wait * num);
 			}
 		}
 	}
@@ -18,7 +18,9 @@ pub fn part_one(input: String) -> String {
 
 fn get_mod_inv(a: i64, m: i64) -> i64 {
 	for i in 1..m {
-		if (a*i) % m == 1 { return i; }
+		if (a * i) % m == 1 {
+			return i;
+		}
 	}
 	return 0;
 }
@@ -32,12 +34,12 @@ pub fn part_two(input: String) -> String {
 	for (remain, bus) in lines.next().unwrap().split(',').enumerate() {
 		if let Ok(num) = bus.parse::<i64>() {
 			m *= num;
-			buses.push(((num - ((remain as i64) % num))%num, num));
+			buses.push(((num - ((remain as i64) % num)) % num, num));
 		}
 	}
 	let mut result = 0;
 	for (remain, modulo) in buses {
-		result += remain * m/modulo * get_mod_inv(m/modulo, modulo);
+		result += remain * m / modulo * get_mod_inv(m / modulo, modulo);
 		result %= m;
 	}
 	return result.to_string();
