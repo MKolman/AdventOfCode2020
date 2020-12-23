@@ -33,7 +33,7 @@ fn parse_input(input: &str) -> (Vec<Rule>, Vec<Ticket>) {
 }
 
 #[wasm_bindgen(js_name = day16_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let (rules, tickets) = parse_input(&input);
 	let mut result = 0;
 	for ticket in &tickets[1..] {
@@ -50,7 +50,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day16_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let (rules, tickets) = parse_input(&input);
 	let mut valid_tickets = Vec::new();
 	'outer: for ticket in &tickets {
@@ -115,6 +115,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(16);
-	assert_eq!(part_one(input.clone()), "22073".to_string());
-	assert_eq!(part_two(input.clone()), "1346570764607".to_string());
+	assert_eq!(part_one(&input), "22073".to_string());
+	assert_eq!(part_two(&input), "1346570764607".to_string());
 }

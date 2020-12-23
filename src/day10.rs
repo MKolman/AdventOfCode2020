@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(js_name = day10_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut num: Vec<usize> = input.lines().map(|l| l.parse().unwrap()).collect();
 	num.sort_unstable();
 	let mut prev = 0;
@@ -14,7 +14,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day10_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut num: Vec<usize> = input.lines().map(|l| l.parse().unwrap()).collect();
 	num.push(0);
 	num.sort_unstable();
@@ -41,6 +41,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(10);
-	assert_eq!(part_one(input.clone()), "2376".to_string());
-	assert_eq!(part_two(input.clone()), "129586085429248".to_string());
+	assert_eq!(part_one(&input), "2376".to_string());
+	assert_eq!(part_two(&input), "129586085429248".to_string());
 }

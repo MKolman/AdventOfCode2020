@@ -60,7 +60,7 @@ fn solve2(input: &[char], mut i: usize) -> (u64, usize) {
 }
 
 #[wasm_bindgen(js_name = day18_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut result = 0;
 	for line in input.lines() {
 		result += solve(&line.chars().collect::<Vec<_>>(), 0).0;
@@ -69,7 +69,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day18_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut result = 0;
 	for line in input.lines() {
 		let (val, _) = solve2(&line.chars().collect::<Vec<_>>(), 0);
@@ -81,6 +81,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(18);
-	assert_eq!(part_one(input.clone()), "67800526776934".to_string());
-	assert_eq!(part_two(input.clone()), "340789638435483".to_string());
+	assert_eq!(part_one(&input), "67800526776934".to_string());
+	assert_eq!(part_two(&input), "340789638435483".to_string());
 }

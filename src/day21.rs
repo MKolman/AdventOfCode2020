@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(js_name = day21_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut alergens: HashMap<&str, HashSet<&str>> = HashMap::new();
 	let mut counter: HashMap<&str, usize> = HashMap::new();
 	for line in input.lines() {
@@ -36,7 +36,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day21_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut alergens: HashMap<&str, HashSet<&str>> = HashMap::new();
 	for line in input.lines() {
 		let parts: Vec<_> = line.split(" (contains ").collect();
@@ -77,9 +77,9 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(21);
-	assert_eq!(part_one(input.clone()), "1815".to_string());
+	assert_eq!(part_one(&input), "1815".to_string());
 	assert_eq!(
-		part_two(input.clone()),
+		part_two(&input),
 		"kllgt,jrnqx,ljvx,zxstb,gnbxs,mhtc,hfdxb,hbfnkq".to_string()
 	);
 }

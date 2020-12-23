@@ -14,7 +14,7 @@ fn parse_mask(line: &str) -> (u64, u64) {
 }
 
 #[wasm_bindgen(js_name = day14_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut mask = (0, 0);
 	let mut mem: HashMap<&str, u64> = HashMap::new();
 	for line in input.lines() {
@@ -53,7 +53,7 @@ fn apply_mask(addr: &str, mask: &str) -> Vec<String> {
 }
 
 #[wasm_bindgen(js_name = day14_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut mask = String::new();
 	let mut mem = HashMap::new();
 	for line in input.lines() {
@@ -79,6 +79,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(14);
-	assert_eq!(part_one(input.clone()), "14839536808842".to_string());
-	assert_eq!(part_two(input.clone()), "4215284199669".to_string());
+	assert_eq!(part_one(&input), "14839536808842".to_string());
+	assert_eq!(part_two(&input), "4215284199669".to_string());
 }

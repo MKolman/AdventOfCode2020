@@ -46,7 +46,7 @@ impl Mul<i64> for Complex {
 }
 
 #[wasm_bindgen(js_name = day12_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut dir = Complex::new(0, 1);
 	for l in input.lines() {
@@ -67,7 +67,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day12_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut way = Complex::new(1, 10);
 	for l in input.lines() {
@@ -90,6 +90,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(12);
-	assert_eq!(part_one(input.clone()), "1032".to_string());
-	assert_eq!(part_two(input.clone()), "156735".to_string());
+	assert_eq!(part_one(&input), "1032".to_string());
+	assert_eq!(part_two(&input), "156735".to_string());
 }

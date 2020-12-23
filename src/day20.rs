@@ -220,7 +220,7 @@ fn find_monsters(mut full: Vec<Vec<bool>>) -> usize {
 }
 
 #[wasm_bindgen(js_name = day20_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let tiles = parse_input(&input);
 	let mut result = 1;
 	for tile in tiles {
@@ -238,7 +238,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day20_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let tiles = parse_input(&input);
 	// Find top left tile to start building grid
 	let mut top_left = 0;
@@ -262,6 +262,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(20);
-	assert_eq!(part_one(input.clone()), "15405893262491".to_string());
-	assert_eq!(part_two(input.clone()), "2133".to_string());
+	assert_eq!(part_one(&input), "15405893262491".to_string());
+	assert_eq!(part_two(&input), "2133".to_string());
 }

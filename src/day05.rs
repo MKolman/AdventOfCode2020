@@ -15,13 +15,13 @@ fn parse_input(input: &str) -> Vec<usize> {
 }
 
 #[wasm_bindgen(js_name = day05_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let seats = parse_input(&input);
 	return seats.iter().max().unwrap().to_string();
 }
 
 #[wasm_bindgen(js_name = day05_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut seats = parse_input(&input);
 	seats.sort_unstable();
 	for (i, id) in seats.iter().enumerate() {
@@ -38,6 +38,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(5);
-	assert_eq!(part_one(input.clone()), "885".to_string());
-	assert_eq!(part_two(input.clone()), "623".to_string());
+	assert_eq!(part_one(&input), "885".to_string());
+	assert_eq!(part_two(&input), "623".to_string());
 }

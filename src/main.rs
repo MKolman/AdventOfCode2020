@@ -36,11 +36,11 @@ fn main() {
 		let input = common::get_input(day + 1);
 		println!("Day {}:", day + 1);
 		let start_one = Instant::now();
-		let sol_one = one(input.clone());
+		let sol_one = one(&input);
 		let dur_one = start_one.elapsed();
 		println!("\t1: {} ({:?})", sol_one, dur_one);
 		let start_two = Instant::now();
-		let sol_two = two(input.clone());
+		let sol_two = two(&input);
 		let dur_two = start_two.elapsed();
 		println!("\t2: {} ({:?})", sol_two, dur_two);
 	}
