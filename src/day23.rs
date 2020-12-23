@@ -56,8 +56,8 @@ pub fn part_two(input: String) -> String {
 		}
 	}
 	cups.resize(1000000, 0);
-	for i in n..1000000 {
-		cups[i] = i + 1;
+	for (i, v) in cups.iter_mut().enumerate().skip(n) {
+		*v = i + 1;
 	}
 	cups[999999] = cur;
 	cups = play(cups, cur, 10000000);
