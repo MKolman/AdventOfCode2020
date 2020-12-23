@@ -72,7 +72,7 @@ fn count_long(seats: &[Vec<Option<bool>>], neighbours: &[(usize, usize)]) -> u8 
 }
 
 #[wasm_bindgen(js_name = day11_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut seats = parse_input(&input);
 	let mut total_count = 0;
 	loop {
@@ -101,7 +101,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day11_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut seats = parse_input(&input);
 	let mut total_count = 0;
 	let neighbours = find_neighbours(&seats);
@@ -133,6 +133,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(11);
-	assert_eq!(part_one(input.clone()), "2243".to_string());
-	assert_eq!(part_two(input.clone()), "2027".to_string());
+	assert_eq!(part_one(&input), "2243".to_string());
+	assert_eq!(part_two(&input), "2027".to_string());
 }

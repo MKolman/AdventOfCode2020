@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(js_name = day13_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut lines = input.lines();
 	let time: i64 = lines.next().unwrap().parse().unwrap();
 	let mut best = (10000000000, 0);
@@ -26,7 +26,7 @@ fn get_mod_inv(a: i64, m: i64) -> i64 {
 }
 
 #[wasm_bindgen(js_name = day13_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut lines = input.lines();
 	lines.next();
 	let mut m = 1;
@@ -48,6 +48,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(13);
-	assert_eq!(part_one(input.clone()), "161".to_string());
-	assert_eq!(part_two(input.clone()), "213890632230818".to_string());
+	assert_eq!(part_one(&input), "161".to_string());
+	assert_eq!(part_two(&input), "213890632230818".to_string());
 }

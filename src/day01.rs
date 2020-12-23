@@ -6,7 +6,7 @@ fn parse_input(input: &str) -> Vec<i64> {
 }
 
 #[wasm_bindgen(js_name = day01_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut set = HashSet::new();
 	let vec = parse_input(&input);
 	for n in vec {
@@ -19,7 +19,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day01_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut set = HashSet::new();
 	let vec = parse_input(&input);
 	for (i, n) in vec.iter().enumerate() {
@@ -36,6 +36,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(1);
-	assert_eq!(part_one(input.clone()), "787776");
-	assert_eq!(part_two(input.clone()), "262738554");
+	assert_eq!(part_one(&input), "787776");
+	assert_eq!(part_two(&input), "262738554");
 }

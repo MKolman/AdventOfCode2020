@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen(js_name = day08_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let code: Vec<(&str, i64)> = input
 		.lines()
 		.map(|l| {
@@ -28,7 +28,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day08_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let mut code: Vec<(&str, i64)> = input
 		.lines()
 		.map(|l| {
@@ -71,6 +71,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(8);
-	assert_eq!(part_one(input.clone()), "1331".to_string());
-	assert_eq!(part_two(input.clone()), "1121".to_string());
+	assert_eq!(part_one(&input), "1331".to_string());
+	assert_eq!(part_two(&input), "1121".to_string());
 }

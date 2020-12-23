@@ -31,7 +31,7 @@ fn play(mut cups: Vec<usize>, start: usize, rounds: usize) -> Vec<usize> {
 }
 
 #[wasm_bindgen(js_name = day23_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let (mut cups, mut cur) = parse_input(&input);
 	cups = play(cups, cur, 100);
 	let mut result = "".to_string();
@@ -47,7 +47,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day23_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let (mut cups, cur) = parse_input(&input);
 	let n = cups.len();
 	for v in cups.iter_mut() {
@@ -67,6 +67,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(23);
-	assert_eq!(part_one(input.clone()), "97624853".to_string());
-	assert_eq!(part_two(input.clone()), "664642452305".to_string());
+	assert_eq!(part_one(&input), "97624853".to_string());
+	assert_eq!(part_two(&input), "664642452305".to_string());
 }

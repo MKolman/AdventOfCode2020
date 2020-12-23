@@ -23,7 +23,7 @@ fn parse_input(input: &str) -> HashMap<String, Vec<(u16, String)>> {
 }
 
 #[wasm_bindgen(js_name = day07_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let graph = parse_input(&input);
 	let mut reverse: HashMap<String, Vec<String>> = HashMap::new();
 	for (outer, contents) in &graph {
@@ -51,7 +51,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day07_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let graph = parse_input(&input);
 	fn inside(
 		color: &str,
@@ -73,6 +73,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(7);
-	assert_eq!(part_one(input.clone()), "370".to_string());
-	assert_eq!(part_two(input.clone()), "29547".to_string());
+	assert_eq!(part_one(&input), "370".to_string());
+	assert_eq!(part_two(&input), "29547".to_string());
 }

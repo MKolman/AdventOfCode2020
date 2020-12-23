@@ -18,7 +18,7 @@ fn parse_input(input: &str) -> Vec<HashMap<&str, &str>> {
 }
 
 #[wasm_bindgen(js_name = day04_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let data = parse_input(&input);
 	let mut result = 0;
 	for pass in &data {
@@ -30,7 +30,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day04_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let rules = [
 		("byr", Regex::new(r"^(19[2-9][0-9]|200[012])$").unwrap()),
 		("iyr", Regex::new(r"^20(1[0-9]|20)$").unwrap()),
@@ -65,6 +65,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(4);
-	assert_eq!(part_one(input.clone()), "228");
-	assert_eq!(part_two(input.clone()), "175");
+	assert_eq!(part_one(&input), "228");
+	assert_eq!(part_two(&input), "175");
 }

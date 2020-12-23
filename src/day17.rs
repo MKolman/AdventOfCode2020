@@ -33,7 +33,7 @@ fn count_neighbours4(
 }
 
 #[wasm_bindgen(js_name = day17_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let start = parse_input(&input);
 	let mut total = vec![vec![vec![false; start[0].len() + 14]; start.len() + 14]; 15];
 	for (i, line) in start.iter().enumerate() {
@@ -69,7 +69,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day17_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let start = parse_input(&input);
 	let mut total = vec![vec![vec![vec![false; start[0].len() + 14]; start.len() + 14]; 15]; 15];
 	for (i, line) in start.iter().enumerate() {
@@ -111,6 +111,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(17);
-	assert_eq!(part_one(input.clone()), "362".to_string());
-	assert_eq!(part_two(input.clone()), "1980".to_string());
+	assert_eq!(part_one(&input), "362".to_string());
+	assert_eq!(part_two(&input), "1980".to_string());
 }

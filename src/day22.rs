@@ -14,7 +14,7 @@ fn parse_input(input: &str) -> Vec<VecDeque<usize>> {
 }
 
 #[wasm_bindgen(js_name = day22_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let mut decks = parse_input(&input);
 	while !decks[0].is_empty() && !decks[1].is_empty() {
 		let (a, b) = (decks[0].pop_front().unwrap(), decks[1].pop_front().unwrap());
@@ -96,7 +96,7 @@ fn play(mut decks: Vec<VecDeque<usize>>, top_level: bool) -> usize {
 }
 
 #[wasm_bindgen(js_name = day22_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let decks = parse_input(&input);
 	let result = play(decks, true);
 	return result.to_string();
@@ -105,6 +105,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(22);
-	assert_eq!(part_one(input.clone()), "32033".to_string());
-	assert_eq!(part_two(input.clone()), "34901".to_string());
+	assert_eq!(part_one(&input), "32033".to_string());
+	assert_eq!(part_two(&input), "34901".to_string());
 }

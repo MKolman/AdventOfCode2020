@@ -17,7 +17,7 @@ fn parse_input(input: &str) -> Vec<(i64, i64, char, String)> {
 }
 
 #[wasm_bindgen(js_name = day02_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	let inp = &parse_input(&input);
 	let mut result = 0;
 	for (min, max, c, pass) in inp {
@@ -28,7 +28,7 @@ pub fn part_one(input: String) -> String {
 }
 
 #[wasm_bindgen(js_name = day02_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	let inp = &parse_input(&input);
 	let mut result = 0;
 	for (min, max, c, pass) in inp {
@@ -41,6 +41,6 @@ pub fn part_two(input: String) -> String {
 #[test]
 fn test() {
 	let input = crate::common::get_input(2);
-	assert_eq!(part_one(input.clone()), "517");
-	assert_eq!(part_two(input.clone()), "284");
+	assert_eq!(part_one(&input), "517");
+	assert_eq!(part_two(&input), "284");
 }

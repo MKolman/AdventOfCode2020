@@ -27,18 +27,18 @@ fn solve(input: &str, length: usize) -> String {
 }
 
 #[wasm_bindgen(js_name = day15_part_one)]
-pub fn part_one(input: String) -> String {
+pub fn part_one(input: &str) -> String {
 	return solve(&input, 2020);
 }
 
 #[wasm_bindgen(js_name = day15_part_two)]
-pub fn part_two(input: String) -> String {
+pub fn part_two(input: &str) -> String {
 	return solve(&input, 30000000);
 }
 
 #[test]
 fn test() {
 	let input = crate::common::get_input(15);
-	assert_eq!(part_one(input.clone()), "492".to_string());
-	assert_eq!(part_two(input.clone()), "63644".to_string());
+	assert_eq!(part_one(&input), "492".to_string());
+	assert_eq!(part_two(&input), "63644".to_string());
 }
