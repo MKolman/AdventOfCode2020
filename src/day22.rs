@@ -62,8 +62,8 @@ fn play(mut decks: Vec<VecDeque<usize>>, top_level: bool) -> usize {
 			// Play sub-game
 			let winner = play(
 				vec![
-					decks[1].iter().copied().take(b).collect(),
 					decks[0].iter().copied().take(a).collect(),
+					decks[1].iter().copied().take(b).collect(),
 				],
 				false,
 			);
