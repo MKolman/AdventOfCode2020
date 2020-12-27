@@ -14,13 +14,13 @@ fn get_tiling(input: &str) -> HashSet<(i32, i32)> {
 				'w' => x -= 1,
 				's' => {
 					y -= 1;
-					if instructions.next().unwrap() == 'e' {
+					if instructions.next() == Some('e') {
 						x += 1;
 					}
 				}
 				'n' => {
 					y += 1;
-					if instructions.next().unwrap() == 'w' {
+					if instructions.next() == Some('w') {
 						x -= 1;
 					}
 				}

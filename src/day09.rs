@@ -34,8 +34,10 @@ pub fn part_two(input: &str) -> String {
 			start += 1;
 		}
 	}
-	return (nums[start..end].iter().min().unwrap() + nums[start..end].iter().max().unwrap())
-		.to_string();
+	if let (Some(min), Some(max)) = (nums[start..end].iter().min(), nums[start..end].iter().max()) {
+		return (min + max).to_string();
+	}
+	return "Something went wrong".to_string();
 }
 
 #[test]

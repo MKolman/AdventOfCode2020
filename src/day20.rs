@@ -110,8 +110,7 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 	let mut visited = HashSet::new();
 	visited.insert(0);
 	let mut stack = vec![0];
-	while !stack.is_empty() {
-		let id = stack.pop().unwrap();
+	while let Some(id) = stack.pop() {
 		'side: for side in 0..4 {
 			if tiles[id].neighbours[side] != None {
 				continue;
@@ -120,24 +119,27 @@ fn find_neighbours(mut tiles: Vec<Tile>) -> Vec<Tile> {
 			let reverse = reverse_border_hash(border);
 			let symetric_hash = border + reverse;
 			let opposite = (side + 2) % 4;
-			for i in border_to_tile.get(&symetric_hash).unwrap() {
-				if *i == id {
+			for &i in border_to_tile
+				.get(&symetric_hash)
+				.expect("Created in Step 1")
+			{
+				if i == id {
 					continue;
 				}
 				for _ in 0..4 {
-					if tiles[*i].borders[opposite] == reverse {
-						tiles[*i].flip();
+					if tiles[i].borders[opposite] == reverse {
+						tiles[i].flip();
 					}
-					if tiles[*i].borders[opposite] == border {
+					if tiles[i].borders[opposite] == border {
 						if !visited.contains(&i) {
-							stack.push(*i);
-							visited.insert(*i);
+							stack.push(i);
+							visited.insert(i);
 						}
-						tiles[id].neighbours[side] = Some(*i);
-						tiles[*i].neighbours[opposite] = Some(id);
+						tiles[id].neighbours[side] = Some(i);
+						tiles[i].neighbours[opposite] = Some(id);
 						continue 'side;
 					}
-					tiles[*i].rotate();
+					tiles[i].rotate();
 				}
 			}
 		}

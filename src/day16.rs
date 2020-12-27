@@ -10,7 +10,6 @@ fn parse_input(input: &str) -> (Vec<Rule>, Vec<Ticket>) {
 	let mut rules = Vec::new();
 	let rule_re = Regex::new("([a-z ]+): ([0-9]+)-([0-9]+) or ([0-9]+)-([0-9]+)").unwrap();
 	for rule in rule_re.captures_iter(groups[0]) {
-		// println!("{:?}", rule);
 		rules.push((
 			rule[1].to_string(),
 			[
@@ -30,6 +29,13 @@ fn parse_input(input: &str) -> (Vec<Rule>, Vec<Ticket>) {
 		}
 	}
 	return (rules, tickets);
+}
+
+fn get_only<T>(set: &HashSet<T>) -> Option<&T> {
+	match set.len() {
+		1 => set.iter().next(),
+		_ => None,
+	}
 }
 
 #[wasm_bindgen(js_name = day16_part_one)]
@@ -90,8 +96,7 @@ pub fn part_two(input: &str) -> String {
 	while change {
 		change = false;
 		for i in 0..nrule {
-			if rule2col[i].len() == 1 {
-				let col = *rule2col[i].iter().next().unwrap();
+			if let Some(&col) = get_only(&rule2col[i]) {
 				for (j, cols) in rule2col.iter_mut().enumerate() {
 					if i != j && cols.contains(&col) {
 						cols.remove(&col);
@@ -105,7 +110,7 @@ pub fn part_two(input: &str) -> String {
 	let mut result = 1;
 	for (i, (rname, _)) in rules.iter().enumerate() {
 		if rname.contains("departure") {
-			let col = *rule2col[i].iter().next().unwrap();
+			let col = *get_only(&rule2col[i]).expect("Size of set is guaranteed to be 1");
 			result *= tickets[0][col];
 		}
 	}

@@ -1,9 +1,30 @@
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
+enum Cmd<'a> {
+	Mask(&'a str),
+	Assign(u64, u64),
+}
+
+fn parse_input(input: &str) -> Vec<Cmd> {
+	let mut result = Vec::new();
+	for line in input.lines() {
+		if line.contains("mask = ") {
+			result.push(Cmd::Mask(&line[7..]));
+		} else {
+			let parts: Vec<&str> = line.split("] = ").collect();
+			result.push(Cmd::Assign(
+				parts[0][4..].parse().unwrap(),
+				parts[1].parse().unwrap(),
+			));
+		}
+	}
+	return result;
+}
+
 fn parse_mask(line: &str) -> (u64, u64) {
 	let (mut mask0, mut mask1) = (u64::MAX, 0);
-	for (i, c) in line[7..].chars().enumerate() {
+	for (i, c) in line.chars().enumerate() {
 		match c {
 			'0' => mask0 -= 1 << (35 - i),
 			'1' => mask1 += 1 << (35 - i),
@@ -16,15 +37,14 @@ fn parse_mask(line: &str) -> (u64, u64) {
 #[wasm_bindgen(js_name = day14_part_one)]
 pub fn part_one(input: &str) -> String {
 	let mut mask = (0, 0);
-	let mut mem: HashMap<&str, u64> = HashMap::new();
-	for line in input.lines() {
-		if line.contains("mask = ") {
-			mask = parse_mask(line);
-		} else {
-			let parts: Vec<&str> = line.split("] = ").collect();
-			let value: u64 = parts[1].parse().unwrap();
-			mem.insert(parts[0], (value & mask.0) | mask.1);
-		}
+	let mut mem: HashMap<u64, u64> = HashMap::new();
+	for cmd in parse_input(input) {
+		match cmd {
+			Cmd::Mask(m) => mask = parse_mask(m),
+			Cmd::Assign(addr, val) => {
+				mem.insert(addr, (val & mask.0) | mask.1);
+			}
+		};
 	}
 	let mut result = 0;
 	for (_, value) in mem.iter() {
@@ -54,18 +74,15 @@ fn apply_mask(addr: &str, mask: &str) -> Vec<String> {
 
 #[wasm_bindgen(js_name = day14_part_two)]
 pub fn part_two(input: &str) -> String {
-	let mut mask = String::new();
+	let mut mask = "";
 	let mut mem = HashMap::new();
-	for line in input.lines() {
-		if line.contains("mask = ") {
-			mask = line[7..].to_string();
-		} else {
-			let parts: Vec<u64> = line[4..]
-				.split("] = ")
-				.map(|s| s.parse().unwrap())
-				.collect();
-			for addr in apply_mask(&format!("{:036b}", parts[0]), &mask) {
-				mem.insert(addr, parts[1]);
+	for cmd in parse_input(input) {
+		match cmd {
+			Cmd::Mask(m) => mask = m,
+			Cmd::Assign(addr, val) => {
+				for addr in apply_mask(&format!("{:036b}", addr), mask) {
+					mem.insert(addr, val);
+				}
 			}
 		}
 	}

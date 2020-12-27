@@ -1,15 +1,19 @@
 use std::collections::HashSet;
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen(js_name = day08_part_one)]
-pub fn part_one(input: &str) -> String {
-	let code: Vec<(&str, i64)> = input
+fn parse_input(input: &str) -> Vec<(&str, i64)> {
+	input
 		.lines()
 		.map(|l| {
 			let pieces: Vec<&str> = l.splitn(2, ' ').collect();
 			(pieces[0], pieces[1].parse().unwrap())
 		})
-		.collect();
+		.collect()
+}
+
+#[wasm_bindgen(js_name = day08_part_one)]
+pub fn part_one(input: &str) -> String {
+	let code = parse_input(input);
 	let mut pointer = 0_i64;
 	let mut acc = 0;
 	let mut visited = HashSet::new();
@@ -29,13 +33,7 @@ pub fn part_one(input: &str) -> String {
 
 #[wasm_bindgen(js_name = day08_part_two)]
 pub fn part_two(input: &str) -> String {
-	let mut code: Vec<(&str, i64)> = input
-		.lines()
-		.map(|l| {
-			let pieces: Vec<&str> = l.splitn(2, ' ').collect();
-			(pieces[0], pieces[1].parse().unwrap())
-		})
-		.collect();
+	let mut code = parse_input(input);
 	for i in 0..code.len() {
 		code[i].0 = match code[i].0 {
 			"jmp" => "nop",

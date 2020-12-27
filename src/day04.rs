@@ -52,9 +52,11 @@ pub fn part_two(input: &str) -> String {
 		if pass.len() as i64 - (pass.contains_key("cid") as i64) == 7 {
 			result += 1;
 			for (key, rule) in &rules {
-				if !rule.is_match(pass.get(key).unwrap()) {
-					result -= 1;
-					break;
+				if let Some(val) = pass.get(key) {
+					if !rule.is_match(val) {
+						result -= 1;
+						break;
+					}
 				}
 			}
 		}

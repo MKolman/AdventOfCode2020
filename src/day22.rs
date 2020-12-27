@@ -16,8 +16,9 @@ fn parse_input(input: &str) -> Vec<VecDeque<usize>> {
 #[wasm_bindgen(js_name = day22_part_one)]
 pub fn part_one(input: &str) -> String {
 	let mut decks = parse_input(&input);
-	while !decks[0].is_empty() && !decks[1].is_empty() {
-		let (a, b) = (decks[0].pop_front().unwrap(), decks[1].pop_front().unwrap());
+	while let (Some(&a), Some(&b)) = (decks[0].front(), decks[1].front()) {
+		decks[0].pop_front();
+		decks[1].pop_front();
 		if a > b {
 			decks[0].push_back(a);
 			decks[0].push_back(b);
@@ -37,7 +38,7 @@ pub fn part_one(input: &str) -> String {
 
 fn play(mut decks: Vec<VecDeque<usize>>, top_level: bool) -> usize {
 	let mut memo = HashSet::new();
-	while !decks[0].is_empty() && !decks[1].is_empty() {
+	while let (Some(&a), Some(&b)) = (decks[0].front(), decks[1].front()) {
 		let state = decks.clone();
 		if memo.contains(&state) {
 			assert!(
@@ -47,8 +48,9 @@ fn play(mut decks: Vec<VecDeque<usize>>, top_level: bool) -> usize {
 			return 0;
 		}
 		memo.insert(state);
-		// Get top cards
-		let (a, b) = (decks[0].pop_front().unwrap(), decks[1].pop_front().unwrap());
+		// Remove top cards
+		decks[0].pop_front();
+		decks[1].pop_front();
 		if decks[0].len() < a || decks[1].len() < b {
 			// If not enough cards in the deck just compare their values
 			if a > b {

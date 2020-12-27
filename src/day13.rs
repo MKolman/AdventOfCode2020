@@ -1,11 +1,18 @@
 use wasm_bindgen::prelude::*;
 
+fn parse_input(input: &str) -> (i64, Vec<&str>) {
+	let mut lines = input.lines();
+	return (
+		lines.next().unwrap().parse().unwrap(),
+		lines.next().unwrap().split(',').collect(),
+	);
+}
+
 #[wasm_bindgen(js_name = day13_part_one)]
 pub fn part_one(input: &str) -> String {
-	let mut lines = input.lines();
-	let time: i64 = lines.next().unwrap().parse().unwrap();
+	let (time, schedule) = parse_input(input);
 	let mut best = (10000000000, 0);
-	for bus in lines.next().unwrap().split(',') {
+	for bus in schedule {
 		if let Ok(num) = bus.parse::<i64>() {
 			let wait = num - (time % num);
 			if wait < best.0 {
@@ -27,11 +34,10 @@ fn get_mod_inv(a: i64, m: i64) -> i64 {
 
 #[wasm_bindgen(js_name = day13_part_two)]
 pub fn part_two(input: &str) -> String {
-	let mut lines = input.lines();
-	lines.next();
+	let (_, schedule) = parse_input(input);
 	let mut m = 1;
 	let mut buses = Vec::new();
-	for (remain, bus) in lines.next().unwrap().split(',').enumerate() {
+	for (remain, bus) in schedule.iter().enumerate() {
 		if let Ok(num) = bus.parse::<i64>() {
 			m *= num;
 			buses.push(((num - ((remain as i64) % num)) % num, num));

@@ -50,16 +50,14 @@ pub fn part_one(input: &str) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut dir = Complex::new(0, 1);
 	for l in input.lines() {
-		let c = l.chars().next().unwrap();
-		let n: i64 = l[1..].parse().unwrap();
-		match c {
-			'F' => pos += dir * n,
-			'L' => dir *= Complex::rot(-n),
-			'R' => dir *= Complex::rot(n),
-			'N' => pos += Complex::new(n, 0),
-			'S' => pos += Complex::new(-n, 0),
-			'E' => pos += Complex::new(0, n),
-			'W' => pos += Complex::new(0, -n),
+		match (l.chars().next(), l[1..].parse::<i64>()) {
+			(Some('F'), Ok(n)) => pos += dir * n,
+			(Some('L'), Ok(n)) => dir *= Complex::rot(-n),
+			(Some('R'), Ok(n)) => dir *= Complex::rot(n),
+			(Some('N'), Ok(n)) => pos += Complex::new(n, 0),
+			(Some('S'), Ok(n)) => pos += Complex::new(-n, 0),
+			(Some('E'), Ok(n)) => pos += Complex::new(0, n),
+			(Some('W'), Ok(n)) => pos += Complex::new(0, -n),
 			_ => panic!("Invalid instruction"),
 		}
 	}
@@ -71,16 +69,14 @@ pub fn part_two(input: &str) -> String {
 	let mut pos = Complex::new(0, 0);
 	let mut way = Complex::new(1, 10);
 	for l in input.lines() {
-		let c = l.chars().next().unwrap();
-		let n: i64 = l[1..].parse().unwrap();
-		match c {
-			'F' => pos += way * n,
-			'L' => way *= Complex::rot(-n),
-			'R' => way *= Complex::rot(n),
-			'N' => way += Complex::new(n, 0),
-			'S' => way += Complex::new(-n, 0),
-			'E' => way += Complex::new(0, n),
-			'W' => way += Complex::new(0, -n),
+		match (l.chars().next(), l[1..].parse::<i64>()) {
+			(Some('F'), Ok(n)) => pos += way * n,
+			(Some('L'), Ok(n)) => way *= Complex::rot(-n),
+			(Some('R'), Ok(n)) => way *= Complex::rot(n),
+			(Some('N'), Ok(n)) => way += Complex::new(n, 0),
+			(Some('S'), Ok(n)) => way += Complex::new(-n, 0),
+			(Some('E'), Ok(n)) => way += Complex::new(0, n),
+			(Some('W'), Ok(n)) => way += Complex::new(0, -n),
 			_ => panic!("Invalid instruction"),
 		}
 	}
