@@ -28,22 +28,21 @@ pub fn part_one(input: &str) -> String {
 	let mut reverse: HashMap<String, Vec<String>> = HashMap::new();
 	for (outer, contents) in &graph {
 		for (_, inner) in contents {
-			reverse.entry(inner.to_string()).or_insert(Vec::new());
-			reverse.get_mut(inner).unwrap().push(outer.to_string());
+			let bags = reverse.entry(inner.to_string()).or_insert(Vec::new());
+			bags.push(outer.to_string());
 		}
 	}
 	let mut visited = HashSet::new();
 	let mut queue = VecDeque::new();
 	queue.push_back("shiny gold".to_string());
-	while !queue.is_empty() {
-		let color = queue.pop_front().unwrap().to_string();
+	while let Some(color) = queue.pop_front() {
 		visited.insert(color.clone());
 		if !reverse.contains_key(&color) {
 			continue;
 		}
 		for next in &reverse[&color] {
-			if !visited.contains(&next.to_string()) {
-				queue.push_back(next.to_string());
+			if !visited.contains(next) {
+				queue.push_back(next.clone());
 			}
 		}
 	}

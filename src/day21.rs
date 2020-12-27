@@ -29,7 +29,9 @@ pub fn part_one(input: &str) -> String {
 	}
 	for ing in alergens.values() {
 		for i in ing {
-			*counter.get_mut(i).unwrap() = 0;
+			if let Some(count) = counter.get_mut(i) {
+				*count = 0;
+			}
 		}
 	}
 	return counter.values().sum::<usize>().to_string();
@@ -60,11 +62,14 @@ pub fn part_two(input: &str) -> String {
 	while !alergens.is_empty() {
 		for a in alergens.clone().keys() {
 			if alergens[a].len() == 1 {
-				let i = *alergens[a].iter().next().unwrap();
-				*alergen_result.get_mut(a).unwrap() = i;
-				alergens.remove(a);
-				for v in alergens.values_mut() {
-					v.remove(i);
+				if let (Some(&i), Some(res)) =
+					(alergens[a].iter().next(), alergen_result.get_mut(a))
+				{
+					*res = i;
+					alergens.remove(a);
+					for v in alergens.values_mut() {
+						v.remove(i);
+					}
 				}
 			}
 		}

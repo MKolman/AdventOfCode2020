@@ -17,7 +17,7 @@ fn parse_input(input: &str) -> Vec<usize> {
 #[wasm_bindgen(js_name = day05_part_one)]
 pub fn part_one(input: &str) -> String {
 	let seats = parse_input(&input);
-	return seats.iter().max().unwrap().to_string();
+	return seats.iter().max().expect("No input given.").to_string();
 }
 
 #[wasm_bindgen(js_name = day05_part_two)]

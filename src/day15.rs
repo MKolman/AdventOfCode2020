@@ -6,7 +6,9 @@ fn solve(input: &str, length: usize) -> String {
 	let start_len = input.matches(',').count();
 	let mut prev = 0;
 	for (i, n) in input.split(',').enumerate() {
-		let p = n.parse().unwrap();
+		let p = n
+			.parse()
+			.unwrap_or_else(|_| panic!("Invalid input. {} is not a number.", n));
 		if i == start_len {
 			prev = p;
 		} else {
